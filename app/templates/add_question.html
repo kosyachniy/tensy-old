@@ -29,7 +29,7 @@ $('.images').on('change', function() {
 	<select name="category" required>
 		<option disabled selected>Категория</option>
 		
-{% for i in categories if i.plus == 'article' %}
+{% for i in categories if i.plus == 'course' %}
 		<option value="{{ i.id }}"{% if i.id == selected %} selected{% endif %}>{{ i.name }}</option>
 {% endfor %}
 

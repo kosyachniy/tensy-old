@@ -6,18 +6,18 @@ from json import loads
 import markdown
 
 @app.route('/<int:id>')
-def article(id):
+def course(id):
 	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
 	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
 
-	article = loads(post(LINK, json={'method': 'articles.get', 'id': id}).text)
-	article2 = dict(article)
-	article2['cont'] = Markup(markdown.markdown(article2['cont']))
+	course = loads(post(LINK, json={'method': 'courses.get', 'id': id}).text)
+	course2 = dict(course)
+	course2['cont'] = Markup(markdown.markdown(course2['cont']))
 
 	category = 0
 	subcategory = 0
 	for i in categories:
-		if i['id'] == article['category']:
+		if i['id'] == course['category']:
 			if i['parent']:
 				category = i['parent']
 				subcategory = i['id']
@@ -27,16 +27,16 @@ def article(id):
 
 	edit = request.args.get('edit')
 
-	return render_template('edit.html' if edit else 'article.html',
-		title = article['name'],
-		description = article['description'],
-		tags = article['tags'],
-		url = article['id'],
+	return render_template('edit.html' if edit else 'course.html',
+		title = course['name'],
+		description = course['description'],
+		tags = course['tags'],
+		url = course['id'],
 		categories = categories,
 		user = user,
 		category = category,
 		subcategory = subcategory,
 		preview = get_preview,
 
-		article = article if edit else article2,
+		course = course if edit else course2,
 	)
