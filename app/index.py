@@ -12,7 +12,7 @@ def index():
 
 	articles = []
 	for i, article in enumerate(categories):
-		if not article['parent']:
+		if not article['parent'] and article['plus'] == 'article':
 			articles.append({
 				'url': article['url'],
 				'name': article['name'],
