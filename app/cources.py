@@ -4,16 +4,16 @@ from app import app, LINK, get_preview
 from requests import post
 from json import loads
 
-@app.route('/<cat>')
-@app.route('/<cat>/<sub>')
-def articles(cat, sub=''):
+@app.route('/cources')
+@app.route('/cources/<sub>')
+def cources(cat, sub=''):
 	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
 	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
 
-	tags = ['Статьи',]
+	tags = ['Курсы',]
 	category = 0
 	subcategory = 0
-	title = 'Статьи'
+	title = 'Курсы'
 	for x in categories:
 		if x['url'] == cat:
 			title = x['name'] # Если подкатегория была удалена - останется основная
@@ -29,9 +29,9 @@ def articles(cat, sub=''):
 
 			break
 
-	articles = loads(post(LINK, json={'method': 'articles.gets', 'category': subcategory if subcategory else category}).text)
+	cources = loads(post(LINK, json={'method': 'cources.gets', 'category': subcategory if subcategory else category}).text)
 
-	return render_template('articles.html',
+	return render_template('cources.html',
 		title = title,
 		description = '',
 		tags = tags,
@@ -42,5 +42,5 @@ def articles(cat, sub=''):
 		subcategory = subcategory,
 		preview = get_preview,
 
-		articles = articles,
+		cources = cources,
 	)

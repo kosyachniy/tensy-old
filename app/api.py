@@ -225,11 +225,11 @@ def process():
 # 	'name': 'Раздел 1',
 # 	'url': 'art',
 # 	'priority': 50,
-#	'plus': 'article',
+#	'plus': 'course',
 # })
 
 #Получение статей #сделать выборку полей
-		elif x['method'] == 'articles.gets':
+		elif x['method'] == 'courses.gets':
 			count = x['count'] if 'count' in x else None
 
 			category = None
@@ -239,19 +239,20 @@ def process():
 					category.append(i['id'])
 				category = {'category': {'$in': category}}
 
-			articles = []
-			for i in db['articles'].find(category).sort('priority', -1)[0:count]:
+			courses = []
+			for i in db['courses'].find(category).sort('priority', -1)[0:count]:
 				del i['_id']
 				
-				articles.append(i)
-			return dumps(articles)
+				courses.append(i)
+			return dumps(courses)
 
-# db['articles'].insert({
+#db['courses'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
+# db['courses'].insert({
 # 	'id': 1,
 # 	'name': 'Title',
 # 	'priority': 50,
 # 	'cont': 'Text',
-# 	'tags': ['article', 'test'],
+# 	'tags': ['course', 'test'],
 # 	'description': 'descr',
 # 	'author': 1,
 # 	'time': 1528238479.252285,
@@ -264,12 +265,12 @@ def process():
 # })
 
 #Получение статьи
-		elif x['method'] == 'articles.get':
+		elif x['method'] == 'courses.get':
 			#Не все поля заполнены
 			if not on(x, ('id',)):
 				return '3'
 
-			i = db['articles'].find_one({'id': x['id']})
+			i = db['courses'].find_one({'id': x['id']})
 
 			if i:
 				del i['_id']
@@ -280,12 +281,12 @@ def process():
 				return '4'
 
 #Редактирование статьи
-		elif x['method'] == 'articles.edit':
+		elif x['method'] == 'courses.edit':
 			#Не все поля заполнены
 			if not on(x, ('id',)):
 				return '3'
 
-			query = db['articles'].find_one({'id': x['id']})
+			query = db['courses'].find_one({'id': x['id']})
 
 			#Отсутствует такая статья
 			if not query:
@@ -303,16 +304,16 @@ def process():
 			for i in ('category', 'tags', 'priority'):
 				if i in x: query[i] = x[i]
 
-			db['articles'].save(query)
+			db['courses'].save(query)
 
 			if 'preview' in x:
-				files = listdir('app/static/load/articles')
+				files = listdir('app/static/load/courses')
 				for i in files:
 					if str(x['id']) + '.' in i:
-						remove('app/static/load/articles/' + i)
+						remove('app/static/load/courses/' + i)
 
 				try:
-					load_image('app/static/load/articles', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
+					load_image('app/static/load/courses', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
 
 				#Ошибка загрузки изображения
 				except:
@@ -321,7 +322,7 @@ def process():
 			return '0'
 
 #Добавление статьи
-		elif x['method'] == 'articles.add':
+		elif x['method'] == 'courses.add':
 			#Не все поля заполнены
 			if not on(x, ('name', 'category', 'cont', 'tags', 'description', 'priority')):
 				return '3'
@@ -331,7 +332,7 @@ def process():
 			x['cont'] = x['cont'].strip()
 
 			try:
-				id = db['articles'].find().sort('id', -1)[0]['id'] + 1
+				id = db['courses'].find().sort('id', -1)[0]['id'] + 1
 			except:
 				id = 1
 
@@ -349,11 +350,11 @@ def process():
 			for i in ('name', 'category', 'cont', 'tags', 'description', 'priority'):
 				if i in x: query[i] = x[i]
 
-			db['articles'].insert(query)
+			db['courses'].insert(query)
 
 			if 'preview' in x:
 				try:
-					load_image('app/static/load/articles', x['preview'], id, x['file'].split('.')[-1] if 'file' in x else None)
+					load_image('app/static/load/courses', x['preview'], id, x['file'].split('.')[-1] if 'file' in x else None)
 
 				#Ошибка загрузки изображения
 				except:

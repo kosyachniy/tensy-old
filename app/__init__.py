@@ -33,18 +33,18 @@ from app import avatar
 from app import image
 
 from app import admin
-from app import add_article
+from app import add_course
 from app import add_question
 
 from app import sys_sign_up
 from app import sys_sign_in
 from app import sys_sign_out
-from app import sys_article_add
-from app import sys_article_edit
+from app import sys_course_add
+from app import sys_course_edit
 from app import sys_question_add
 
 from app import forum
 from app import expert
 from app import experts
-from app import article
-from app import articles
+from app import course
+from app import courses

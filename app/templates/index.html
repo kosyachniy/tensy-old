@@ -7,16 +7,32 @@
 place('.u-notes', 3, 100, 12, 7, 850, 450);
 </script>
 
-{% for j in articles %}
-
-<a href="{{ j.url }}"><div class="u-title">{{ j.name }}</div></a>
+<a href="/courses"><div class="u-title">Курсы</div></a>
 
 <div class="u-notes">
-	{% for i in j.articles %}<a href="/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('articles', i.id) }}");"></div><div class="u-text">{{ i.name }}<p>{{ i.description }}</p></div></div></a>{% endfor %}
+	{% for i in courses %}<a href="/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('articles', i.id) }}");"></div><div class="u-text">{{ i.name }}<p>{{ i.description }}</p></div></div></a>{% endfor %}
 </div>
 
 <br><br>
 
-{% endfor %}
+<a href="/forum"><div class="u-title">Вопросы</div></a>
+
+<div class="u-notes">
+	{% for i in questions %}<a href="/{{ i.id }}"><div><div class="u-text">{{ i.name }}<p>{{ i.description }}</p></div></div></a>{% endfor %}
+</div>
+
+<br><br>
+
+<a href="/experts"><div class="u-title">Эксперты</div></a>
+
+<div class="u-notes">
+	{% for i in users %}<a href="/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('users', i.id) }}");"></div><div class="u-text">{{ i.surname }} {{ i.name }}<p>@{{ i.login }}</p></div></div></a>{% endfor %}
+</div>
+
+<br><br>
+
+<div class="u-title">Новости</div>
+
+<br><br>
 
 {% endblock %}
