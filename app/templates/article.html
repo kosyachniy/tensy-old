@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<style>
+img {width: 100%;}
+
+.u-block a {color: blue;}
+
+.u-tag {
+	background-color: var(--quote);
+	font-size: 0.9em;
+	padding: 12px;
+	border-radius: 15px;
+	margin: 3px 7px 3px 7px;
+}
+
+code {
+	border: 0px !important; /*1px solid var(--border-active);*/
+	padding: 5px 10px 5px 10px !important;
+	border-radius: 7px;
+	background-color: var(--quote);
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 13.5px;
+}
+</style>
+
+<h2 class="u-title">{{ article.name }} &nbsp; <a href="?edit=1"><img src="/static/edit.png" alt="Редактировать"></a></h2>
+
+{% if preview('articles', article.id)[0] != '0' %}<img src="{{ preview('articles', article.id) }}" alt="{{ article.description }}"><br>{% endif %}
+{% for i in article.tags %}<div class="u-tag">{{ i }}</div>{% endfor %}<br><br>
+
+<div class="u-block">
+	{{ article.cont }}
+</div>
+
+{% endblock %}
