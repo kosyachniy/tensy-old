@@ -43,8 +43,7 @@ from app import sys_course_add
 from app import sys_course_edit
 from app import sys_question_add
 
-from app import forum
 from app import expert
 from app import experts
-from app import course
-from app import courses
+from app import ladder
+from app import ladders

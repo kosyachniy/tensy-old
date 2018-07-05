@@ -4,18 +4,18 @@ from app import app, LINK, get_preview
 from requests import post
 from json import loads
 
-@app.route('/courses')
-@app.route('/courses/<sub>')
-def courses(sub=''):
+@app.route('/ladders')
+@app.route('/ladders/<sub>')
+def ladders(sub=''):
 	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
 	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
 
-	tags = ['Курсы',]
+	tags = ['Course', 'Ladder']
 	category = 0
 	subcategory = 0
 	title = 'Курсы'
 	for x in categories:
-		if x['url'] == 'courses':
+		if x['url'] == 'ladders':
 			title = x['name'] # Если подкатегория была удалена - останется основная
 			tags.append(x['name'])
 			category = x['id']
@@ -29,18 +29,18 @@ def courses(sub=''):
 
 			break
 
-	courses = loads(post(LINK, json={'method': 'courses.gets', 'category': subcategory if subcategory else category}).text)
+	ladders = loads(post(LINK, json={'method': 'ladders.gets', 'category': subcategory if subcategory else category}).text)
 
-	return render_template('courses.html',
+	return render_template('ladders.html',
 		title = title,
 		description = '',
 		tags = tags,
-		url = 'courses/' + sub,
+		url = 'ladders/' + sub,
 		categories = categories,
 		user = user,
 		category = category,
 		subcategory = subcategory,
 		preview = get_preview,
 
-		courses = courses,
+		ladders = ladders,
 	)

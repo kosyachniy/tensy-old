@@ -22,9 +22,9 @@ def experts():
 			})
 
 	return render_template('experts.html',
-		title = 'Эксперты',
-		description = '',
-		tags = [],
+		title = 'Experts',
+		description = 'Top users, experts',
+		tags = ['Top users', 'experts'],
 		url = 'experts',
 		categories = categories,
 		user = user,

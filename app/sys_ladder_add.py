@@ -4,12 +4,12 @@ from app import app, LINK
 from requests import post
 import re, json, base64
 
-@app.route('/sys_course_add', methods=['POST'])
-def sys_course_add():
+@app.route('/sys_ladder_add', methods=['POST'])
+def sys_ladder_add():
 	x = request.form
 
 	req = {
-		'method': 'courses.add',
+		'method': 'ladders.add',
 		'name': x['name'],
 		'category': int(x['category']),
 		'author': x['author'],
@@ -30,4 +30,4 @@ def sys_course_add():
 
 	req = json.loads(req)
 
-	return redirect(LINK + 'courses/' + str(req['id']))
+	return redirect(LINK + 'ladders/' + str(req['id']))

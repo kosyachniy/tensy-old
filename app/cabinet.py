@@ -13,8 +13,8 @@ def cabinet():
 
 	if 'token' in session:
 		return render_template('cabinet.html',
-			title = 'Личный кабинет',
-			description = 'Личный кабинет, настройки, аккаунт, профиль',
+			title = 'Personal area',
+			description = 'Personal area, settings, account, profile',
 			url = x if x else 'cabinet',
 			categories = categories,
 			user = user,

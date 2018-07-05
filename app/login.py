@@ -12,9 +12,9 @@ def login():
 	redirect = request.args.get('url')
 
 	return render_template('login.html',
-		title = 'Логин', #Аккаунт
-		description = 'Регистрация / Авторизация',
-		tags = ['Регистрация', 'Авторизация'],
+		title = 'Account',
+		description = 'Sign Up / Log In',
+		tags = ['Sign Up', 'Log In'],
 		url = 'login?url=' + redirect,
 		user = user,
 		categories = categories,

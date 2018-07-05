@@ -7,12 +7,12 @@ img {
 }
 </style>
 
-<h2 class="title2">Обновить аватарку</h2>
+<h2 class="title2">Update avatar</h2>
 <img src="{{ preview('users', user.id) }}"><br>
 
 <form action="settings?url={{ url }}" method="post" enctype="multipart/form-data">
 	<input type="file" name="photo" class="photo" id="photo">
-	<label for="photo">Выбрать фотографию</label>
+	<label for="photo">Select photo</label>
 	<script>
 
 $('.photo').on('change', function() {
@@ -28,20 +28,20 @@ $('.photo').on('change', function() {
 
 	</script>
 
-	<h2 class="title2">Личная информация</h2>
-	<input type="text" name="name" placeholder="Имя"{% if user.name %} value="{{ user.name }}"{% endif %}>
-	<input type="text" name="surname" placeholder="Фамилия"{% if user.surname %} value="{{ user.surname }}"{% endif %}>
+	<h2 class="title2">Personal information</h2>
+	<input type="text" name="name" placeholder="Name"{% if user.name %} value="{{ user.name }}"{% endif %}>
+	<input type="text" name="surname" placeholder="Surname"{% if user.surname %} value="{{ user.surname }}"{% endif %}>
 
-	<h2 class="title2">Описание</h2>
-	<textarea name="description" placeholder="Описание">{% if user.description %}{{ user.description }}{% endif %}</textarea>
+	<h2 class="title2">Description</h2>
+	<textarea name="description" placeholder="Description">{% if user.description %}{{ user.description }}{% endif %}</textarea>
 
-	<h2 class="title2">Контакты</h2>
-	<input type="text" name="mail" placeholder="Почта" value="{{ user.mail }}">
+	<h2 class="title2">Contacts</h2>
+	<input type="text" name="mail" placeholder="Mail" value="{{ user.mail }}">
 
-	<h2 class="title2">Изменить пароль</h2>
+	<h2 class="title2">Change password</h2>
 	<input type="password" name="pass" readonly onfocus="this.removeAttribute('readonly')">
 
-	<input type="submit" value="Сохранить">
+	<input type="submit" value="Save">
 </form>
 
 	{% endblock %}

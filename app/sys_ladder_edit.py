@@ -4,14 +4,14 @@ from app import app, LINK
 from requests import post
 import re, json, base64
 
-@app.route('/sys_article_edit', methods=['POST'])
-def sys_article_edit():
+@app.route('/sys_ladder_edit', methods=['POST'])
+def sys_ladder_edit():
 	x = request.form
 
 	id = request.args.get('i')
 
 	req = {
-		'method': 'articles.edit',
+		'method': 'ladders.edit',
 		'id': int(id),
 		'name': x['name'],
 		'category': int(x['category']),

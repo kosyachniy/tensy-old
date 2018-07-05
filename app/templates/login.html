@@ -28,27 +28,27 @@ font {
 </style>
 
 <div class="u-signup">
-	<font>Зарегистрироваться</font>
+	<font>Sign Up</font>
 	<form action="sys_sign_up{% if redirect %}?url={{ redirect }}{% endif %}" method="post">
-		<input type="text" name="name" placeholder="Имя" required>
-		<input type="text" name="surname" placeholder="Фамилия" required>
-		<input type="text" name="login" placeholder="Ник" readonly onfocus="this.removeAttribute('readonly')" required>
-		<input type="email" name="mail" placeholder="Почта" readonly onfocus="this.removeAttribute('readonly')" required>
-		<input type="password" name="pass" placeholder="Пароль" readonly onfocus="this.removeAttribute('readonly')" required>
-		<input type="submit" value="Зарегистрироваться">
+		<input type="text" name="name" placeholder="Name" required>
+		<input type="text" name="surname" placeholder="Surname" required>
+		<input type="text" name="login" placeholder="Login" readonly onfocus="this.removeAttribute('readonly')" required>
+		<input type="email" name="mail" placeholder="Mail" readonly onfocus="this.removeAttribute('readonly')" required>
+		<input type="password" name="pass" placeholder="Password" readonly onfocus="this.removeAttribute('readonly')" required>
+		<input type="submit" value="Sign Up">
 	</form>
 	<div class="u-alert">
-		Нажимая кнопку «Зарегистрироваться», Вы автоматически соглашаетесь с <a href="privacy" style="color: blue;">условиями сайта</a>.
+		By clicking «Sign up» you automatically agree to <a href="privacy" style="color: blue;">the Terms and Conditions</a>.
 	</div>
 </div><div class="u-signin">
-	<font>Войти</font>
+	<font>Log In</font>
 	<form action="sys_sign_in{% if redirect %}?url={{ redirect }}{% endif %}" method="post">
-		<input placeholder="Логин" name="login" required autofocus>
-		<input type="password" placeholder="Пароль" name="pass" required>
-		<input type="submit" value="Войти">
+		<input placeholder="Login" name="login" required autofocus>
+		<input type="password" placeholder="Password" name="pass" required>
+		<input type="submit" value="Log In">
 	</form>
 	<div class="u-alert">
-	Регистр пароля учитывается
+	Password is case-sensitive
 	</div>
 	<div class="u-alert u-caps">
 	</div>
@@ -57,7 +57,7 @@ font {
 $('body').keypress(function(e) { 
 	var s = String.fromCharCode(e.which);
 	if (s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey) {
-		$('.u-caps').html('Включён Caps Lock!');
+		$('.u-caps').html('Caps Lock is on!');
 	} else {
 		$('.u-caps').html('');
 	}

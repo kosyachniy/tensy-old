@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,8 +10,8 @@
 	<link rel ="shortcut icon" type="images/png" href="/static/favicon.png">
 
 	<meta name="author" content="Poloz Alexey (polozhev@mail.ru)">
-	<meta name="description" content="{% if description %}{{ description }}{% else %}Открытые онлайн курсы на токенах. Смешанная система образования.{% endif %}">
-	<meta name="keywords" content="{% if tags %}{% for i in tags %}{{ i }},{% endfor %}{% else %}Онлайн курсы,смешанная система образования,курсы на токенах{% endif %}">
+	<meta name="description" content="{% if description %}{{ description }}{% else %}Open online courses on tokens. Mixed education system.{% endif %}">
+	<meta name="keywords" content="{% if tags %}{% for i in tags %}{{ i }},{% endfor %}{% else %}Online courses, mixed education system, courses on tokens{% endif %}">
 
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 	<script src="/static/main_header.js"></script>
@@ -37,18 +37,18 @@
 	</div><div class="u-expand">
 		<div class="u-search">
 			<form action="/search" method="post">
-				<input type="search" name="search" placeholder="Поиск">
+				<input type="search" name="search" placeholder="Search">
 			</form>
 		</div><div class="u-user">
 
 {% if user.id %}
-			<a href="/cabinet">{{ user.login }}</a> &nbsp;<a href="/sys_sign_out" class="del">Выйти</a>
+			<a href="/cabinet">{{ user.login }}</a> &nbsp;<a href="/sys_sign_out" class="del">Log Out</a>
 {% else %}
-			<a class="del">Гость &nbsp;</a><a href="/login{% if url %}?url={{ url }}{% endif %}">Войти</a>
+			<a class="del">Guest &nbsp;</a><a href="/login{% if url %}?url={{ url }}{% endif %}">Log In</a>
 {% endif %}
 
 		</div><div class="u-menu{% if without_menu %} u-without-menu{% endif %}">
-			<div onclick="location.href='/'"{% if url == 'index' %} class="u-selected"{% endif %}>Главная</div>
+			<div onclick="location.href='/'"{% if url == 'index' %} class="u-selected"{% endif %}>Main</div>
 
 			<hr>
 
@@ -65,7 +65,7 @@
 {% if user.admin and user.admin >= 6 %}
 			<hr>
 
-			<div onclick="location.href='/admin'"{% if category == -1 %} class="u-selected"{% endif %}>Админка</div>
+			<div onclick="location.href='/admin'"{% if category == -1 %} class="u-selected"{% endif %}>Admin</div>
 {% endif %}
 
 		</div>

@@ -5,19 +5,19 @@ from requests import post
 from json import loads
 import markdown
 
-@app.route('/courses/<int:id>')
-def course(id):
+@app.route('/ladders/<int:id>')
+def ladder(id):
 	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
 	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
 
-	course = loads(post(LINK, json={'method': 'courses.get', 'id': id}).text)
-	course2 = dict(course)
-	course2['cont'] = Markup(markdown.markdown(course2['cont']))
+	ladder = loads(post(LINK, json={'method': 'ladders.get', 'id': id}).text)
+	ladder2 = dict(ladder)
+	ladder2['cont'] = Markup(markdown.markdown(ladder2['cont']))
 
 	category = 0
 	subcategory = 0
 	for i in categories:
-		if i['id'] == course['category']:
+		if i['id'] == ladder['category']:
 			if i['parent']:
 				category = i['parent']
 				subcategory = i['id']
@@ -27,16 +27,16 @@ def course(id):
 
 	edit = request.args.get('edit')
 
-	return render_template('edit.html' if edit else 'course.html',
-		title = course['name'],
-		description = course['description'],
-		tags = course['tags'],
-		url = course['id'],
+	return render_template('edit.html' if edit else 'ladder.html',
+		title = ladder['name'],
+		description = ladder['description'],
+		tags = ladder['tags'],
+		url = ladder['id'],
 		categories = categories,
 		user = user,
 		category = category,
 		subcategory = subcategory,
 		preview = get_preview,
 
-		course = course if edit else course2,
+		ladder = ladder if edit else ladder2,
 	)

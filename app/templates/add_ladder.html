@@ -1,0 +1,44 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<div class="u-title">Add ladder</div>
+
+<form action="/sys_ladder_add" method="post" enctype="multipart/form-data">
+	<input type="text" name="name" placeholder="Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
+
+	<input type="file" name="preview" class="preview" id="preview">
+	<label for="preview">Select preview</label>
+	<script>
+
+$('.preview').on('change', function() {
+	var file = this.value.split('\\');
+	file = file[file.length-1];
+
+	if ($('div').is('.u-files')) {
+		$('.u-files').html(file);
+	} else {
+		$('label').after('<div class="u-files">' + file + '</div>');
+	}
+});
+
+	</script>
+
+	<select name="category" required>
+		<option disabled selected>Categories</option>
+		
+{% for i in categories if i['plus'] == 'ladder' %}
+		<option value="{{ i.id }}"{% if i.id == selected %} selected{% endif %}>{{ i.name }}</option>
+{% endfor %}
+
+	</select>
+	<input type="text" name="author" placeholder="Author" readonly onfocus="this.removeAttribute('readonly')" required>
+	<textarea name="description" placeholder="Description" class="u-cont" required></textarea>
+
+	<br><br>
+
+	<input type="text" name="tags" placeholder="Tags" readonly onfocus="this.removeAttribute('readonly')" required>
+
+	<input type="submit" value="Add">
+</form>
+
+{% endblock %}
