@@ -29,7 +29,6 @@ from app import errors
 from app import cabinet
 from app import settings
 from app import edit
-from app import avatar
 from app import image
 
 from app import admin
@@ -39,9 +38,8 @@ from app import add_question
 from app import sys_sign_up
 from app import sys_sign_in
 from app import sys_sign_out
-from app import sys_course_add
-from app import sys_course_edit
-from app import sys_question_add
+from app import sys_ladder_add
+from app import sys_ladder_edit
 
 from app import expert
 from app import experts

@@ -232,11 +232,11 @@ def process():
 # 	'name': 'Раздел 1',
 # 	'url': 'art',
 # 	'priority': 50,
-#	'plus': 'course',
+#	'plus': 'ladder',
 # })
 
 #Получение статей #сделать выборку полей
-		elif x['method'] == 'courses.gets':
+		elif x['method'] == 'ladders.gets':
 			count = x['count'] if 'count' in x else None
 
 			category = None
@@ -248,20 +248,20 @@ def process():
 
 			print(category)
 
-			courses = []
-			for i in db['courses'].find(category).sort('priority', -1)[0:count]:
+			ladders = []
+			for i in db['ladders'].find(category).sort('priority', -1)[0:count]:
 				del i['_id']
 				
-				courses.append(i)
-			return dumps(courses)
+				ladders.append(i)
+			return dumps(ladders)
 
-#db['courses'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
-# db['courses'].insert({
+#db['ladders'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
+# db['ladders'].insert({
 # 	'id': 1,
 # 	'name': 'Title',
 # 	'priority': 50,
 # 	'cont': 'Text',
-# 	'tags': ['course', 'test'],
+# 	'tags': ['ladder', 'test'],
 # 	'description': 'descr',
 # 	'author': 1,
 # 	'time': 1528238479.252285,
@@ -274,12 +274,12 @@ def process():
 # })
 
 #Получение статьи
-		elif x['method'] == 'courses.get':
+		elif x['method'] == 'ladders.get':
 			#Не все поля заполнены
 			if not on(x, ('id',)):
 				return '3'
 
-			i = db['courses'].find_one({'id': x['id']})
+			i = db['ladders'].find_one({'id': x['id']})
 
 			if i:
 				del i['_id']
@@ -290,12 +290,12 @@ def process():
 				return '4'
 
 #Редактирование статьи
-		elif x['method'] == 'courses.edit':
+		elif x['method'] == 'ladders.edit':
 			#Не все поля заполнены
 			if not on(x, ('id',)):
 				return '3'
 
-			query = db['courses'].find_one({'id': x['id']})
+			query = db['ladders'].find_one({'id': x['id']})
 
 			#Отсутствует такая статья
 			if not query:
@@ -313,11 +313,11 @@ def process():
 			for i in ('category', 'tags', 'priority'):
 				if i in x: query[i] = x[i]
 
-			db['courses'].save(query)
+			db['ladders'].save(query)
 
 			if 'preview' in x:
 				try:
-					load_image('app/static/load/courses', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
+					load_image('app/static/load/ladders', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
 
 				#Ошибка загрузки изображения
 				except:
@@ -326,7 +326,7 @@ def process():
 			return '0'
 
 #Добавление статьи
-		elif x['method'] == 'courses.add':
+		elif x['method'] == 'ladders.add':
 			#Не все поля заполнены
 			if not on(x, ('name', 'category', 'author', 'tags', 'description')):
 				return '3'
@@ -335,7 +335,7 @@ def process():
 			x['description'] = x['description'].replace('\r\n', '').replace('\n', '').strip()
 
 			try:
-				id = db['courses'].find().sort('id', -1)[0]['id'] + 1
+				id = db['ladders'].find().sort('id', -1)[0]['id'] + 1
 			except:
 				id = 1
 
@@ -353,11 +353,11 @@ def process():
 			for i in ('name', 'category', 'author', 'tags', 'description'):
 				if i in x: query[i] = x[i]
 
-			db['courses'].insert(query)
+			db['ladders'].insert(query)
 
 			if 'preview' in x:
 				try:
-					load_image('app/static/load/courses', x['preview'], id, x['file'].split('.')[-1] if 'file' in x else None)
+					load_image('app/static/load/ladders', x['preview'], id, x['file'].split('.')[-1] if 'file' in x else None)
 
 				#Ошибка загрузки изображения
 				except:
@@ -381,82 +381,24 @@ def process():
 			else:
 				return '4'
 
-#Получение пользователя
-		elif x['method'] == 'users.gets':
-			users = []
+#Получение экспертов
+		elif x['method'] == 'experts.gets':
+			experts = []
 
 			if 'sort' in x:
-				all_users = db['users'].find().sort('rating.' + str(x['sort']), -1)
+				users = db['users'].find().sort('rating.' + str(x['sort']), -1)
 			else:
-				all_users = db['users'].find()
+				users = db['users'].find()
 
-			for i in all_users:
+			for i in users:
 				del i['_id']
-				users.append(i)
+				experts.append(i)
 			
-			return dumps(users)
+			return dumps(experts)
 
 #Поиск
 		elif x['method'] == 'search':
 			pass
-
-#Добавить вопрос
-		elif x['method'] == 'question.add':
-			#Не все поля заполнены
-			if not on(x, ('name', 'category')):
-				return '3'
-
-			x['name'] = x['name'].strip()
-			if x['cont']: x['cont'] = x['cont'].strip()
-
-			try:
-				id = db['question'].find().sort('id', -1)[0]['id'] + 1
-			except:
-				id = 1
-
-			query = {
-				'id': id,
-				'author': user,
-				'time': time.time(),
-				'status': 3, #!
-				'view': [user,],
-				'like': [],
-				'dislike': [],
-				'answers': [],
-			}
-
-			for i in ('name', 'category', 'cont', 'tags'):
-				if i in x: query[i] = x[i]
-
-			db['questions'].insert(query)
-
-			if 'images' in x:
-				try:
-					load_image('app/static/load/questions', x['images'], id, x['file'].split('.')[-1] if 'file' in x else None)
-
-				#Ошибка загрузки изображения
-				except:
-					return '4'
-
-			return dumps({'id': id})
-
-#Получение вопросов
-		elif x['method'] == 'questions.gets':
-			count = x['count'] if 'count' in x else None
-
-			category = None
-			if 'category' in x:
-				category = [x['category'],]
-				for i in db['categories'].find({'parent': x['category']}):
-					category.append(i['id'])
-				category = {'category': {'$in': category}}
-
-			questions = []
-			for i in db['questions'].find(category).sort('time', -1)[0:count]:
-				del i['_id']
-				
-				questions.append(i)
-			return dumps(questions)
 
 #Поиск
 		elif x['method'] == 'search':

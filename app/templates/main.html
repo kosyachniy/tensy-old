@@ -6,7 +6,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<title>{% if title %}{{title}} - {% endif %}{Source}</title>
+	<title>{% if title %}{{title}} - {% endif %}{Sectum}</title>
 	<link rel ="shortcut icon" type="images/png" href="/static/favicon.png">
 
 	<meta name="author" content="Poloz Alexey (polozhev@mail.ru)">
@@ -32,7 +32,7 @@
 }
 				</style>
 			</defs>
-			<text id="_BlendEdu_" data-name="{BlendEdu}" class="cls-1" x="3.273" y="197.008">{BlendEdu}</text>
+			<text id="_Sectum_" data-name="{Sectum}" class="cls-1" x="3.273" y="197.008">{Sectum}</text>
 		</svg>
 	</div><div class="u-expand">
 		<div class="u-search">
@@ -49,18 +49,8 @@
 
 		</div><div class="u-menu{% if without_menu %} u-without-menu{% endif %}">
 			<div onclick="location.href='/'"{% if url == 'index' %} class="u-selected"{% endif %}>Main</div>
-
-			<hr>
-
-{% for i in categories if not i.parent %}
-			<div onclick="location.href='/{{ i.url }}'"{% if i.id == category and not subcategory %} class="u-selected"{% endif %}>{{ i.name }}{% if i.plus %} <a href="/admin/add/{{ i.plus }}/?i={{ i.id }}" class="u-add">+</a>{% endif %}</div>
-
-	{% if i.id == category %}
-		{% for j in categories if j.parent == i.id %}
-			<div onclick="location.href='/{{ i.url }}/{{ j.url }}'" class="u-sub{% if j.id == subcategory %} u-selected{% endif %}">{{ j.name }} <a href="/admin/add/{{ i.plus }}/?i={% if j.id %}{{ j.id }}{% else %}{{ i.id }}{% endif %}" class="u-add">+</a></div>
-		{% endfor %}
-	{% endif %}
-{% endfor %}
+			<div onclick="location.href='/ladders'"{% if url == 'ladders' %} class="u-selected"{% endif %}>Ladders</div>
+			<div onclick="location.href='/experts'"{% if url == 'experts' %} class="u-selected"{% endif %}>Experts</div>
 
 {% if user.admin and user.admin >= 6 %}
 			<hr>
