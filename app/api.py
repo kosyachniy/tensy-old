@@ -75,7 +75,7 @@ def process():
 				return '5'
 
 			#Недопустимый логин
-			if not 3 <= len(x['login']) <= 20 or len(findall('[^a-z0-9]', x['login'])) or not len(findall('[a-z]', x['login'])):
+			if not 3 <= len(x['login']) <= 10 or len(findall('[^a-z0-9]', x['login'])) or not len(findall('[a-z]', x['login'])):
 				return '4'
 
 			#Почта зарегистрирована
@@ -111,6 +111,7 @@ def process():
 				'name': x['name'].title() if 'name' in x else None,
 				'surname': x['surname'].title() if 'surname' in x else None,
 				'rating': 0,
+				'tokens': 500,
 			})
 
 			token = generate()

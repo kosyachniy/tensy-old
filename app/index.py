@@ -8,9 +8,9 @@ from json import loads
 @app.route('/index')
 def index():
 	return render_template('index.html',
-		title = 'Главная',
+		title = 'Main',
 		description = '',
-		tags = [],
+		tags = ['main page', 'ladders', 'experts'],
 		url = 'index',
 
 		#categories = loads(post(LINK, json={'method': 'categories.gets'}).text),

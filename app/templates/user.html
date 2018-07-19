@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<style>
+	.u-block-photo {
+		width: 50%;
+	}
+
+	.u-block-photo img {
+		width: 100%;
+	}
+
+	.u-block-info {
+		width: 50%;
+		padding: 0 20px 0 20px;
+	}
+
+	.u-block-info h2 {
+		margin: 0;
+	}
+
+	.u-block-info hr {
+		margin: 10px 0 10px 0;
+	}
+
+	@media all and (max-width: 640px) {
+		.u-block-photo, .u-block-info {
+			width: 100%;
+		}
+	}
+</style>
+
+<div class="u-block-photo">
+	<img src="{{ preview('users', users.id) }}">
+</div><div class="u-block-info">
+	<h2>{{ users.surname }} {{ users.name }}</h2>
+	 &nbsp; @{{ users.login }}
+	<hr>
+	{{ users.mail }}
+	<br>
+	{{ users.description }}
+</div>
+
+<br><br>
+
+<div class="u-title">Ladders &nbsp; <img src="/static/rating.svg" alt="Редактировать"> {{ users.rating }}</div><br><br>
+
+<<< Here is the list of active ladders >>>
+
+
+{% endblock %}

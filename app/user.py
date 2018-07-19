@@ -1,10 +1,10 @@
-from flask import session, request, render_template
-from app import app, LINK, get_url
+from flask import render_template, session
+from app import app, LINK, get_preview
 
 from requests import post
-import base64
+from json import loads
 
-@app.route('/users/<int:id>', methods=['POST'])
+@app.route('/user/<int:id>')
 def user(id):
 	return render_template('user.html',
 		title = '',

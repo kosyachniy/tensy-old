@@ -5,7 +5,7 @@ from requests import post
 from json import loads
 import markdown
 
-@app.route('/ladders/<int:id>')
+@app.route('/ladder/<int:id>')
 def ladder(id):
 	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
 	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}

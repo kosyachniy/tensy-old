@@ -11,7 +11,14 @@ def signup():
 	if not all([i in x for i in ('login', 'pass', 'name', 'surname', 'mail')]):
 		return render_template('message.html', cont='3')
 
-	req = post(LINK, json={'method': 'profile.reg', 'login': x['login'], 'pass': x['pass'], 'mail': x['mail'], 'name': x['name'], 'surname': x['surname']}).text
+	req = post(LINK, json={
+		'method': 'profile.reg',
+		'login': x['login'],
+		'pass': x['pass'],
+		'mail': x['mail'],
+		'name': x['name'],
+		'surname': x['surname']
+	}).text
 
 	if len(req) <= 3:
 		return render_template('message.html', cont=req)
