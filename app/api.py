@@ -9,7 +9,7 @@ from json import dumps
 from random import randint
 from os import listdir, remove
 
-#from time import sleep
+from time import sleep
 
 generate = lambda length=32: ''.join([chr(randint(48, 123)) for i in range(length)])
 on = lambda x, y: all([i in x for i in y])
@@ -216,15 +216,15 @@ def process():
 				return '4'
 
 #Получение категорий
-		elif x['method'] == 'categories.gets':
-			categories = []
-			for i in db['categories'].find().sort('priority', -1): #{"$unwind": "$Applicants"}
-				# print('!!!', i)
-				# time.sleep(2)
-				del i['_id']
+# 		elif x['method'] == 'categories.gets':
+# 			categories = []
+# 			for i in db['categories'].find().sort('priority', -1): #{"$unwind": "$Applicants"}
+# 				# print('!!!', i)
+# 				# time.sleep(2)
+# 				del i['_id']
 
-				categories.append(i)
-			return dumps(categories)
+# 				categories.append(i)
+# 			return dumps(categories)
 
 # db['categories'].insert({
 # 	'id': 1,
@@ -245,8 +245,6 @@ def process():
 				for i in db['categories'].find({'parent': x['category']}):
 					category.append(i['id'])
 				category = {'category': {'$in': category}}
-
-			print(category)
 
 			ladders = []
 			for i in db['ladders'].find(category).sort('priority', -1)[0:count]:
@@ -364,6 +362,8 @@ def process():
 					return '4'
 
 			return dumps({'id': id})
+
+#
 
 #Получение пользователя
 		elif x['method'] == 'users.get':
