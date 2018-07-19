@@ -188,7 +188,9 @@ def process():
 
 				i['surname'] = x['surname'].title()
 
-			if 'description' in x: i['description'] = x['description']
+			if 'description' in x:
+				i['description'] = x['description']
+
 			db['users'].save(i)
 
 			if 'photo' in x:
@@ -288,7 +290,7 @@ def process():
 			else:
 				return '4'
 
-#Редактирование статьи
+#Редактирование курса
 		elif x['method'] == 'ladders.edit':
 			#Не все поля заполнены
 			if not on(x, ('id',)):
@@ -296,20 +298,18 @@ def process():
 
 			query = db['ladders'].find_one({'id': x['id']})
 
-			#Отсутствует такая статья
+			#Отсутствует такой курс
 			if not query:
 				return '4'
 
 			if 'name' in x:
 				query['name'] = x['name'].strip()
 			if 'description' in x:
-				query['description'] = x['description'].replace('\r\n', '').replace('\n', '').strip()
-			if 'cont' in x:
-				query['cont'] = x['cont'].strip()
+				query['description'] = x['description'].strip()
 
 			query['status'] = 3 #!
 
-			for i in ('category', 'tags', 'priority'):
+			for i in ('author', 'tags', 'priority'): #'category'
 				if i in x: query[i] = x[i]
 
 			db['ladders'].save(query)
@@ -324,14 +324,14 @@ def process():
 
 			return '0'
 
-#Добавление статьи
+#Добавление курса
 		elif x['method'] == 'ladders.add':
 			#Не все поля заполнены
-			if not on(x, ('name', 'category', 'author', 'tags', 'description')):
+			if not on(x, ('name', 'author', 'tags', 'description')): #, 'category'
 				return '3'
 
 			x['name'] = x['name'].strip()
-			x['description'] = x['description'].replace('\r\n', '').replace('\n', '').strip()
+			x['description'] = x['description'].strip()
 
 			try:
 				id = db['ladders'].find().sort('id', -1)[0]['id'] + 1
@@ -347,9 +347,10 @@ def process():
 				'like': [],
 				'dislike': [],
 				'comment': [],
+				'priority': x['priority'] if 'priority' in x else 500,
 			}
 
-			for i in ('name', 'category', 'author', 'tags', 'description'):
+			for i in ('name', 'author', 'tags', 'description'): #, 'category'
 				if i in x: query[i] = x[i]
 
 			db['ladders'].insert(query)

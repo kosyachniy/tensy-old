@@ -14,11 +14,11 @@ def sys_ladder_edit():
 		'method': 'ladders.edit',
 		'id': int(id),
 		'name': x['name'],
-		'category': int(x['category']),
-		'cont': x['cont'],
+		# 'category': int(x['category']),
+		'author': x['author'],
 		'tags': [i.strip() for i in re.compile(r'[a-zA-Zа-яА-Я ]+').findall(x['tags'])],
 		'description': x['description'],
-		'priority': x['priority'] if 'priority' in x else 50,
+		'priority': x['priority'] if 'priority' in x else 500,
 	}
 
 	if 'preview' in request.files:
@@ -32,4 +32,4 @@ def sys_ladder_edit():
 	if req.isdigit() and int(req) > 0:
 		return render_template('message.html', cont=req)
 
-	return redirect(LINK + str(id))
+	return redirect(LINK + 'ladder/' + str(id))

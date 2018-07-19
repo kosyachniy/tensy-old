@@ -23,20 +23,13 @@ $('.preview').on('change', function() {
 
 	</script>
 
-	<select name="category" required>
-		<option disabled selected>Categories</option>
-		
-{% for i in categories if i['plus'] == 'ladder' %}
-		<option value="{{ i.id }}"{% if i.id == selected %} selected{% endif %}>{{ i.name }}</option>
-{% endfor %}
-
-	</select>
 	<input type="text" name="author" placeholder="Author" readonly onfocus="this.removeAttribute('readonly')" required>
 	<textarea name="description" placeholder="Description" class="u-cont" required></textarea>
 
 	<br><br>
 
 	<input type="text" name="tags" placeholder="Tags" readonly onfocus="this.removeAttribute('readonly')" required>
+	<input type="text" name="priority" placeholder="Priority" value="500" readonly onfocus="this.removeAttribute('readonly')" required>
 
 	<input type="submit" value="Add">
 </form>

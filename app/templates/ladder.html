@@ -4,8 +4,6 @@
 <style>
 img {width: 100%;}
 
-.u-block a {color: blue;}
-
 .u-tag {
 	background-color: var(--quote);
 	font-size: 0.9em;
@@ -13,24 +11,22 @@ img {width: 100%;}
 	border-radius: 15px;
 	margin: 3px 7px 3px 7px;
 }
-
-code {
-	border: 0px !important; /*1px solid var(--border-active);*/
-	padding: 5px 10px 5px 10px !important;
-	border-radius: 7px;
-	background-color: var(--quote);
-	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-	font-size: 13.5px;
-}
 </style>
 
-<h2 class="u-title">{{ course.name }} &nbsp; <a href="?edit=1"><img src="/static/edit.png" alt="Редактировать"></a></h2>
+<h2 class="u-title">{{ ladder.name }} &nbsp; <a href="?edit=1"><img src="/static/edit.png" alt="Edit"></a></h2>
 
-{% if preview('courses', course.id)[0] != '0' %}<img src="{{ preview('courses', course.id) }}" alt="{{ course.description }}"><br>{% endif %}
-{% for i in course.tags %}<div class="u-tag">{{ i }}</div>{% endfor %}<br><br>
+<img src="{{ preview('ladders', ladder.id) }}" alt="{{ ladder.name }}"><br>
+
+{% for i in ladder.tags %}<div class="u-tag">{{ i }}</div>{% endfor %}<br><br>
 
 <div class="u-block">
-	{{ course.cont }}
+	{{ ladder.description }}
 </div>
+
+<br>
+
+<input type="submit" value="Start" onclick="location.href='{{ ladder.id }}/question/0';">
+
+<br><br>
 
 {% endblock %}

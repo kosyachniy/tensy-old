@@ -49,7 +49,10 @@
 
 		</div><div class="u-menu{% if without_menu %} u-without-menu{% endif %}">
 			<div onclick="location.href='/'"{% if url == 'index' %} class="u-selected"{% endif %}>Main</div>
-			<div onclick="location.href='/ladders'"{% if url == 'ladders' %} class="u-selected"{% endif %}>Ladders</div>
+
+			<hr>
+			
+			<div onclick="location.href='/ladders'"{% if url == 'ladders' %} class="u-selected"{% endif %}>Ladders <a href="/admin/add/ladder" class="u-add">+</a></div>
 			<div onclick="location.href='/experts'"{% if url == 'experts' %} class="u-selected"{% endif %}>Experts</div>
 
 {% if user.admin and user.admin >= 6 %}

@@ -11,10 +11,11 @@ def sys_ladder_add():
 	req = {
 		'method': 'ladders.add',
 		'name': x['name'],
-		'category': int(x['category']),
+		# 'category': int(x['category']),
 		'author': x['author'],
 		'tags': [i.strip() for i in re.compile(r'[a-zA-Zа-яА-Я ]+').findall(x['tags'])],
 		'description': x['description'],
+		'priority': x['priority'],
 	}
 
 	if 'preview' in request.files:
@@ -30,4 +31,4 @@ def sys_ladder_add():
 
 	req = json.loads(req)
 
-	return redirect(LINK + 'ladders/' + str(req['id']))
+	return redirect(LINK + 'ladder/' + str(req['id']))
