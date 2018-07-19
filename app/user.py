@@ -6,6 +6,7 @@ from json import loads
 import markdown
 
 @app.route('/user/<int:id>')
+@app.route('/user/<int:id>/')
 def user(id):
 	users = loads(post(LINK, json={'method': 'users.get', 'id': id}).text)
 	users['description'] = Markup(markdown.markdown(users['description']))
@@ -14,7 +15,7 @@ def user(id):
 		title = '',
 		description = '',
 		tags = [],
-		url = 'index',
+		url = 'user/%d' % id,
 
 		#categories = loads(post(LINK, json={'method': 'categories.gets'}).text),
 		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},

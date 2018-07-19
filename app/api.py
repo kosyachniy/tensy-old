@@ -112,6 +112,7 @@ def process():
 				'surname': x['surname'].title() if 'surname' in x else None,
 				'rating': 0,
 				'tokens': 500,
+				'admin': 3,
 			})
 
 			token = generate()
@@ -348,6 +349,12 @@ def process():
 				'dislike': [],
 				'comment': [],
 				'priority': x['priority'] if 'priority' in x else 500,
+				'steps': [{
+					'name': 'You have read and agreed to <a href="codex">Honor code</a>',
+					'cont': '',
+					'options': ['Yes', 'No', 'Don\'t understand'],
+					'answers': [0,],
+				},],
 			}
 
 			for i in ('name', 'author', 'tags', 'description'): #, 'category'
@@ -365,7 +372,96 @@ def process():
 
 			return dumps({'id': id})
 
-#
+#Добавление шага #добавлять по id #менять местами
+		elif x['method'] == 'step.add':
+			#Не все поля заполнены
+			if not on(x, ('ladder', 'name', 'options')):
+				return '3'
+
+			x['name'] = x['name'].strip()
+			if 'cont' in x: x['cont'] = x['cont'].strip()
+
+			try:
+				ladder = db['ladders'].find_one({'id': x['ladder']})
+			except:
+				return '4'
+
+			if type(x['options']) != list:
+				return '5'
+
+			if 'answers' in x and (type(x['answers']) != list or any(type(i) != int for i in x['answers'])):
+				return '6'
+
+			ladder['steps'].append({
+				'name': x['name'],
+				'cont': x['cont'] if 'cont' in x else '',
+				'options': [i.strip() for i in x['options']],
+				'answers': x['answers'] if 'answers' in x else [],
+				})
+
+			db['ladders'].save(ladder)
+
+			return dumps({'id': len(ladder['steps'])})
+
+#Изменение шага
+		elif x['method'] == 'step.edit':
+			#Не все поля заполнены
+			if not on(x, ('ladder', 'step', 'name', 'options')):
+				return '3' #add type
+
+			x['name'] = x['name'].strip()
+			if 'cont' in x: x['cont'] = x['cont'].strip() #delete
+
+			try:
+				ladder = db['ladders'].find_one({'id': x['ladder']})
+			except:
+				return '4'
+
+			if type(x['options']) != list:
+				return '5'
+
+			if 'answers' in x and (type(x['answers']) != list or any(type(i) != int for i in x['answers'])):
+				return '6'
+
+			if len(ladder['steps']) > x['step']:
+				ladder['steps'][x['step']] = {
+					'name': x['name'],
+					'cont': x['cont'] if 'cont' in x else '',
+					'options': [i.strip() for i in x['options']],
+					'answers': x['answers'] if 'answers' in x else [],
+				}
+			else:
+				return '7'
+
+			db['ladders'].save(ladder)
+
+			return dumps({'id': len(ladder['steps'])})
+
+#Удаление шага
+		elif x['method'] == 'step.delete':
+			#Не все поля заполнены
+			if not on(x, ('ladder', 'step')):
+				return '3'
+
+			if type(x['ladder']) != int:
+				return '4'
+
+			try:
+				ladder = db['ladders'].find_one({'id': x['ladder']})
+			except:
+				return '5'
+
+			if type(x['step']) != int:
+				return '6'
+
+			if len(ladder['steps']) > x['step']:
+				del ladder['steps'][x['step']]
+			else:
+				return '7'
+
+			db['ladders'].save(ladder)
+
+			return dumps({'id': len(ladder['steps'])})
 
 #Получение пользователя
 		elif x['method'] == 'users.get':
@@ -397,10 +493,6 @@ def process():
 				experts.append(i)
 			
 			return dumps(experts)
-
-#Поиск
-		elif x['method'] == 'search':
-			pass
 
 #Поиск
 		elif x['method'] == 'search':

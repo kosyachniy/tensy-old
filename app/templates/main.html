@@ -48,18 +48,23 @@
 {% endif %}
 
 		</div><div class="u-menu{% if without_menu %} u-without-menu{% endif %}">
-			<div onclick="location.href='/'"{% if url == 'index' %} class="u-selected"{% endif %}>Main</div>
+			<div onclick="location.href='/'"{% if 'index' in url %} class="u-selected"{% endif %}>Main</div>
 
 			<hr>
 			
-			<div onclick="location.href='/ladders'"{% if url == 'ladders' %} class="u-selected"{% endif %}>Ladders <a href="/admin/add/ladder" class="u-add">+</a></div>
-			<div onclick="location.href='/experts'"{% if url == 'experts' %} class="u-selected"{% endif %}>Experts</div>
+			<div onclick="location.href='/ladders'"{% if 'ladder' in url  %} class="u-selected"{% endif %}>Ladders <a href="/admin/add/ladder" class="u-add">+</a></div>
+			<div onclick="location.href='/experts'"{% if 'experts' in url or 'user' in url %} class="u-selected"{% endif %}>Experts</div>
 
-{% if user.admin and user.admin >= 6 %}
+{% if user.admin and user.admin >= 3 %}
 			<hr>
 
-			<div onclick="location.href='/admin'"{% if category == -1 %} class="u-selected"{% endif %}>Admin</div>
+			<div onclick="location.href='/cabinet'"{% if 'cabinet' in url %} class="u-selected"{% endif %}>Profile</div>
+
+{% if user.admin >= 6 %}
+			<div onclick="location.href='/admin'"{% if 'admin' in url %} class="u-selected"{% endif %}>Admin</div>
 {% endif %}
+{% endif %}
+
 
 		</div>
 

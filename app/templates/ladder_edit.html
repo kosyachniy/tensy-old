@@ -29,14 +29,46 @@ $('.preview').on('change', function() {
 	</script>
 
 	<input type="text" name="author" placeholder="Author" value="{{ ladder.author }}" readonly onfocus="this.removeAttribute('readonly')">
-	<textarea name="description" placeholder="Description" class="u-cont" required>{{ ladder.description }}</textarea>
+	<textarea name="description" placeholder="Description" class="u-cont">{{ ladder.description }}</textarea>
 
 	<br><br>
 
-	<input type="text" name="tags" placeholder="Tags" value="{{ ','.join(ladder.tags) }}" readonly onfocus="this.removeAttribute('readonly')" required>
+	<input type="text" name="tags" placeholder="Tags" value="{{ ','.join(ladder.tags) }}" readonly onfocus="this.removeAttribute('readonly')">
 	<input type="text" name="priority" placeholder="Priority" value="{{ ladder.priority }}" readonly onfocus="this.removeAttribute('readonly')">
 
 	<input type="submit" value="Edit">
 </form>
+
+	<br><br><hr><hr><br><br>
+
+{% for i, el in enumerate(ladder.steps) %}
+	<h2 class="u-title">Step {{ i }}{% if i == 0 %} (Introduction){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder.id }}&step={{ i }}"><img src="/static/delete.svg" alt="Delete"></a></h2>
+
+	<form action="/sys_step_edit?ladder={{ ladder.id }}&step={{ i }}" method="post" enctype="multipart/form-data">
+		<input type="text" name="name" placeholder="Name" value="{{ el.name }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
+		<textarea name="cont" placeholder="Content" class="u-cont">{{ el.cont }}</textarea>
+
+		<textarea name="options" placeholder="Options" class="u-descr" required>{{ ';'.join(el.options) }}</textarea>
+		<input type="text" name="answers" placeholder="Answers" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
+
+		<input type="submit" value="Edit">
+	</form>
+
+		<br><br><hr>
+{% endfor %}
+
+	<h2 class="u-title">Add step</h2>
+
+	<form action="/sys_step_add?ladder={{ ladder.id }}" method="post" enctype="multipart/form-data">
+		<input type="text" name="name" placeholder="Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
+		<textarea name="cont" placeholder="Content" class="u-cont"></textarea>
+
+		<textarea name="options" placeholder="Options" class="u-descr" required></textarea>
+		<input type="text" name="answers" placeholder="Answers" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
+
+		<input type="submit" value="Add">
+	</form>
+
+		<br><br>
 
 {% endblock %}

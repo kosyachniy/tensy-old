@@ -4,7 +4,10 @@ from app import app, LINK, get_preview
 from requests import post
 from json import loads
 
+@app.route('/ladder')
+@app.route('/ladder/')
 @app.route('/ladders')
+@app.route('/ladders/')
 @app.route('/ladders/<sub>')
 def ladders(sub=''):
 	title = 'Ladders' #change with category

@@ -5,6 +5,7 @@ from requests import post
 from json import loads
 
 @app.route('/experts')
+@app.route('/experts/')
 def experts():
 	return render_template('experts.html',
 		title = 'Experts',

@@ -4,8 +4,8 @@ from app import app, LINK, get_url
 from requests import post
 import base64
 
-@app.route('/settings', methods=['POST'])
-def settings():
+@app.route('/sys_profile_edit', methods=['POST'])
+def sys_profile_edit():
 	x = request.form
 
 	if 'token' not in session:

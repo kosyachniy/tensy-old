@@ -7,10 +7,15 @@ img {
 }
 </style>
 
+<br>
+
+<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens"> &nbsp; {{ user.tokens }}</h2>
+<h2 class="u-stat"><img src="/static/rating.svg" alt="Rating"> &nbsp; {{ user.rating }}</h2>
+
 <h2 class="title2">Update avatar</h2>
 <img src="{{ preview('users', user.id) }}"><br>
 
-<form action="settings?url={{ url }}" method="post" enctype="multipart/form-data">
+<form action="/sys_profile_edit?url={{ url }}" method="post" enctype="multipart/form-data">
 	<input type="file" name="photo" class="photo" id="photo">
 	<label for="photo">Select photo</label>
 	<script>

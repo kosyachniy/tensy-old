@@ -25,7 +25,6 @@ from app import admin
 
 from app import login
 from app import cabinet
-from app import settings
 
 from app import errors
 from app import image
@@ -33,8 +32,12 @@ from app import image
 from app import sys_sign_up
 from app import sys_sign_in
 from app import sys_sign_out
+from app import sys_profile_edit
 from app import sys_ladder_add
 from app import sys_ladder_edit
+from app import sys_step_add
+from app import sys_step_edit
+from app import sys_step_delete
 
 from app import user
 from app import experts
@@ -42,4 +45,3 @@ from app import experts
 from app import ladder
 from app import ladders
 from app import ladder_add
-from app import ladder_edit
