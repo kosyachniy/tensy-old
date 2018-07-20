@@ -12,7 +12,6 @@ from os import listdir, remove
 from time import sleep
 
 generate = lambda length=32: ''.join([chr(randint(48, 123)) for i in range(length)])
-on = lambda x, y: all([i in x for i in y])
 
 def max_image(url):
 	x = listdir(url)
@@ -138,6 +137,7 @@ def process():
 				'mail': x['mail'],
 				'name': x['name'].title() if 'name' in x else None,
 				'surname': x['surname'].title() if 'surname' in x else None,
+				'description': '',
 				'rating': 0,
 				'tokens': 500,
 				'admin': 3,
@@ -422,7 +422,8 @@ def process():
 				('ladder', True, int),
 				('name', True, str),
 				('options', True, list, str),
-				('answers', False, list, int)
+				('answers', False, list, int),
+				('cont', False, str),
 			))
 			if mes: return mes
 
@@ -524,6 +525,27 @@ def process():
 				users = db['users'].find()
 			
 			return dumps({'error': 0, 'users': del_id(users)})
+
+#Получение ступени
+		elif x['method'] == 'step.get':
+			mes = errors(x, (
+				('ladder', True, int),
+				('id', True, int),
+			))
+			if mes: return mes
+
+			i = db['ladders'].find_one({'id': x['ladder']})
+
+			if i:
+				if len(i['steps']) > x['id']:
+					return dumps({'error': 0, 'step': i['steps'][x['id']], 'name': i['name'], 'tags': i['tags']})
+
+				else:
+					return dumps({'error': 6, 'message': 'Step does not exsist'})
+
+			#Несуществует такого курса
+			else:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
 
 #Поиск
 		elif x['method'] == 'search':

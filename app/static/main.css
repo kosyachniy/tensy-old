@@ -56,13 +56,16 @@ form {
 input, textarea, select, label {
 	display: inline-block;
 	vertical-align: middle;
-	width: 100%;
+	width: calc(100% - 14px);
 	font-size: 20px;
 	border-radius: 15px;
 	margin: 7px;
 	padding: 7px 10px 7px 10px;
 	border: 1px solid var(--border);
 	color: var(--font-white);
+}
+
+input:not(input[type="checkbox"]), textarea, select, label {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -84,7 +87,6 @@ input, input:active, input:hover, input:focus {
 */
 
 input[type="submit"] {
-	width: 100%;
 	margin-top: 15px;
 	background-color: var(--border);
 	cursor: pointer;
@@ -105,8 +107,10 @@ input:hover, input:active, input:focus, textarea:hover, textarea:active, textare
 input:valid:not(input[type="submit"]) {border: 1px solid var(--border-submit);}
 
 input[type="checkbox"] {
-	width: 20px;
-	padding: 20px 0 0 0;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	margin: 0;
 }
 
 input[type="file"] {display: none;}
@@ -461,3 +465,15 @@ textarea.u-descr {
 	margin: 0;
 	padding: 0;
 }
+
+/**/
+
+/*.u-sys, .u-sys tr, .u-sys td {
+	border: 0;
+}
+
+.u-sys td {
+	padding: 10px;
+	line-height: 1em;
+	height: calc(1em + 20px);
+}*/

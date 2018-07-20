@@ -37,6 +37,7 @@ from app import sys_ladder_edit
 from app import sys_step_add
 from app import sys_step_edit
 from app import sys_step_delete
+from app import sys_step_check
 
 from app import user
 from app import experts
@@ -44,3 +45,4 @@ from app import experts
 from app import ladder
 from app import ladders
 from app import ladder_add
+from app import step

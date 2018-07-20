@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<style>
+img {width: 100%;}
+
+code {
+	border: 0px !important; /*1px solid var(--border-active);*/
+	padding: 5px 10px 5px 10px !important;
+	border-radius: 7px;
+	background-color: var(--quote);
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 13.5px;
+}
+
+.u-check {
+	padding: 10px;
+	width: 100%;
+}
+</style>
+
+<h2 class="u-title">{{ step.name }}<!--  &nbsp; <a href="../../study/{{ id }}"><img src="/static/question.svg" alt="Question" style="width: 1em; height: 1em; top: 5px;"></a> --></h2>
+
+{{ step.cont }}
+
+<form action="/sys_step_check?ladder={{ ladder }}&step={{ id }}" method="post" enctype="multipart/form-data">
+{% for i, el in enumerate(step.options) %}
+	<div class="u-check"><input type="checkbox" name="{{ i }}" value="1"> &nbsp; {{ el }}</div>
+{% endfor %}
+
+	<input type="submit" value="Answer">
+</form>
+
+<br><br>
+
+{% endblock %}

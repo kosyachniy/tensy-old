@@ -2,7 +2,7 @@ from flask import session, request, render_template
 from app import app, LINK, get_url
 
 from requests import post
-import base64
+import json, base64
 
 @app.route('/sys_profile_edit', methods=['POST'])
 def sys_profile_edit():
@@ -13,7 +13,7 @@ def sys_profile_edit():
 
 	req = {
 		'method': 'profile.edit',
-		'token': session['token']
+		'token': session['token'],
 	}
 
 	for i in ('name', 'surname', 'description'): #mail #password
@@ -32,5 +32,3 @@ def sys_profile_edit():
 		return get_url(request.args.get('url'))
 	else:
 		return render_template('message.html', cont=req['message'])
-
-	
