@@ -26,9 +26,11 @@ def sys_profile_edit():
 		req['photo'] = y
 		req['file'] = request.files['photo'].filename
 
-	req = post(LINK, json=req).text
+	req = json.loads(post(LINK, json=req).text)
 
-	if req != '0' and len(req) < 3:
-		return render_template('message.html', cont=req)
+	if not req['error']:
+		return get_url(request.args.get('url'))
+	else:
+		return render_template('message.html', cont=req['message'])
 
-	return get_url(request.args.get('url'))
+	

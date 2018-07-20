@@ -20,9 +20,9 @@ def ladders(sub=''):
 		url = 'ladders/' + sub,
 
 		#categories = loads(post(LINK, json={'method': 'categories.gets'}).text),
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		preview = get_preview,
 
-		ladders = loads(post(LINK, json={'method': 'ladders.gets'}).text) #, 'category': subcategory if subcategory else category}).text),
+		ladders = loads(post(LINK, json={'method': 'ladders.gets'}).text)['ladders'] #, 'category': subcategory if subcategory else category}).text),
 	)

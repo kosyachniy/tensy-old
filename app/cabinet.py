@@ -7,9 +7,6 @@ from json import loads
 @app.route('/cabinet')
 @app.route('/cabinet/')
 def cabinet():
-	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
-	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
-
 	x = request.args.get('url')
 
 	if 'token' in session:
@@ -17,8 +14,9 @@ def cabinet():
 			title = 'Personal area',
 			description = 'Personal area, settings, account, profile',
 			url = x if x else 'cabinet',
-			categories = categories,
-			user = user,
+
+			user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
+
 			preview = get_preview,
 		)
 

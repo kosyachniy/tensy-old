@@ -16,7 +16,7 @@ def add_ladder():
 		tags = ['admin panel', 'add ladder', 'add course', 'create course'],
 		url = 'admin/add/ladder', #?i=%d' % id,
 
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		#selected = id,
 	)

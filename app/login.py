@@ -7,9 +7,6 @@ from json import loads
 @app.route('/login')
 @app.route('/login/')
 def login():
-	categories = loads(post(LINK, json={'method': 'categories.gets'}).text)
-	user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2}
-
 	redirect = request.args.get('url')
 
 	return render_template('login.html',
@@ -17,8 +14,9 @@ def login():
 		description = 'Sign Up / Log In',
 		tags = ['Sign Up', 'Log In'],
 		url = 'login?url=' + redirect,
-		user = user,
-		categories = categories,
+
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
+
 		without_menu = True,
 
 		redirect = redirect,

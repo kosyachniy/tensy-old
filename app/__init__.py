@@ -27,7 +27,6 @@ from app import login
 from app import cabinet
 
 from app import errors
-from app import image
 
 from app import sys_sign_up
 from app import sys_sign_in

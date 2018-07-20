@@ -8,7 +8,7 @@ import markdown
 @app.route('/user/<int:id>')
 @app.route('/user/<int:id>/')
 def user(id):
-	users = loads(post(LINK, json={'method': 'users.get', 'id': id}).text)
+	users = loads(post(LINK, json={'method': 'users.get', 'id': id}).text)['user']
 	users['description'] = Markup(markdown.markdown(users['description']))
 
 	return render_template('user.html',
@@ -17,8 +17,7 @@ def user(id):
 		tags = [],
 		url = 'user/%d' % id,
 
-		#categories = loads(post(LINK, json={'method': 'categories.gets'}).text),
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		preview = get_preview,
 

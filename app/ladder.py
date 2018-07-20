@@ -8,7 +8,7 @@ import markdown
 @app.route('/ladder/<int:id>')
 @app.route('/ladder/<int:id>/')
 def ladder(id):
-	ladder = loads(post(LINK, json={'method': 'ladders.get', 'id': id}).text)
+	ladder = loads(post(LINK, json={'method': 'ladders.get', 'id': id}).text)['ladder']
 	ladder2 = dict(ladder)
 	ladder2['description'] = Markup(markdown.markdown(ladder2['description']))
 
@@ -22,7 +22,7 @@ def ladder(id):
 		tags = ladder['tags'],
 		url = 'ladder/%d' % ladder['id'],
 
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		preview = get_preview,
 		enumerate = enumerate,

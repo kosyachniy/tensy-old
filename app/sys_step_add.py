@@ -2,7 +2,7 @@ from flask import session, request, render_template, redirect
 from app import app, LINK
 
 from requests import post
-import re, json, base64
+import json
 
 @app.route('/sys_step_add', methods=['POST'])
 def sys_step_add():
@@ -20,9 +20,9 @@ def sys_step_add():
 	if 'answers' in x and len(x['answers']):
 		req['answers'] = [int(i) for i in x['answers'].split(';')]
 
-	req = post(LINK, json=req).text
-	
-	if req.isdigit():
-		return render_template('message.html', cont=req)
-	else:
+	req = json.loads(post(LINK, json=req).text)
+
+	if not req['error']:
 		return redirect(LINK + 'ladder/' + id + '/?edit=1')
+	else:
+		return render_template('message.html', cont=req['message'])

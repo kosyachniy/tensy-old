@@ -13,9 +13,9 @@ def experts():
 		tags = ['top users', 'experts'],
 		url = 'experts',
 
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		preview = get_preview,
 
-		experts = loads(post(LINK, json={'method': 'experts.gets'}).text),
+		experts = loads(post(LINK, json={'method': 'experts.gets'}).text)['users'],
 	)

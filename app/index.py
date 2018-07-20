@@ -15,12 +15,12 @@ def index():
 		url = 'index',
 
 		#categories = loads(post(LINK, json={'method': 'categories.gets'}).text),
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text) if 'id' in session else {'id': 0, 'admin': 2},
+		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 		preview = get_preview,
 
-		ladders = loads(post(LINK, json={'method': 'ladders.gets'}).text),
+		ladders = loads(post(LINK, json={'method': 'ladders.gets'}).text)['ladders'],
 		#questions = loads(post(LINK, json={'method': 'questions.gets'}).text),
-		experts = loads(post(LINK, json={'method': 'experts.gets'}).text),
+		experts = loads(post(LINK, json={'method': 'experts.gets'}).text)['users'],
 		#news = None,
 	)

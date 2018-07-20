@@ -24,11 +24,9 @@ def sys_ladder_add():
 		req['preview'] = y
 		req['file'] = request.files['preview'].filename
 
-	req = post(LINK, json=req).text
+	req = json.loads(post(LINK, json=req).text)
 
-	if req.isdigit():
-		return render_template('message.html', cont=req)
-
-	req = json.loads(req)
-
-	return redirect(LINK + 'ladder/' + str(req['id']))
+	if not req['error']:
+		redirect(LINK + 'ladder/' + str(req['id']))
+	else:
+		return render_template('message.html', cont=req['message'])

@@ -41,6 +41,28 @@ def load_image(url, data, adr=None, format='jpg', type='base64'):
 
 	return id
 
+def errors(x, filters):
+	for i in filters:
+		if i[0] in x:
+			#Неправильный тип данных
+			if type(x[i[0]]) != i[2] or (type(x[i[0]]) == list and any(type(j) != i[3] for j in x[i[0]])):
+				mes = 'Invalid data type: %s (required %s' % (i[0], str(i[2]))
+				if i[2] == list:
+					mes += ' - %s' % str(i[3])
+				mes += ')'
+				return dumps({'error': 4, 'message': mes})
+
+		#Не все поля заполнены
+		elif i[1]:
+			return dumps({'error': 3, 'message': 'Not all required fields are filled in: %s' % i[0]})
+
+def del_id(x):
+	y = []
+	for i in x:
+		del i['_id']
+		y.append(i)
+	return y
+
 
 @app.route('/', methods=['POST'])
 def process():
@@ -48,7 +70,7 @@ def process():
 	#print(x)
 
 	if 'method' not in x:
-		return '2'
+		return dumps({'error': 2, 'message': 'Wrong method'})
 
 	#Убираем лишние отступы
 	for i in x:
@@ -65,38 +87,44 @@ def process():
 #Регистрация
 		if x['method'] == 'profile.reg':
 			#Не все поля заполнены
-			if not on(x, ('login', 'pass', 'mail')):
-				return '3'
+			mes = errors(x, (
+				('login', True, str),
+				('pass', True, str),
+				('mail', True, str),
+				('name', False, str),
+				('surname', False, str),
+			))
+			if mes: return mes
 
 			x['login'] = x['login'].lower()
 
 			#Логин существует
 			if len(list(db['users'].find({'login': x['login']}))):
-				return '5'
+				return dumps({'error': 5, 'message': 'This login already exists'})
 
 			#Недопустимый логин
 			if not 3 <= len(x['login']) <= 10 or len(findall('[^a-z0-9]', x['login'])) or not len(findall('[a-z]', x['login'])):
-				return '4'
+				return dumps({'error': 6, 'message': 'Wrong login: length must be more than 3 and less than 10 characters, consist only of digits and at least a few latin letters'})
 
 			#Почта зарегистрирована
 			if len(list(db['users'].find({'mail': x['mail']}))):
-				return '8'
+				return dumps({'error': 7, 'message': 'This mail already exsists'})
 
 			#Недопустимый пароль
 			if not 6 <= len(x['pass']) <= 40 or len(findall('[^a-zA-z0-9!@#$%^&*()-_+=;:,./?\|`~\[\]{}]', x['pass'])) or not len(findall('[a-zA-Z]', x['pass'])) or not len(findall('[0-9]', x['pass'])):
-				return '6'
+				return dumps({'error': 8, 'message': 'Invalid password: the length must be from 6 to 40 characters, consist of mandatory digits, characters:! @, #, $, %, ^, &, *, (, ), -, _, +, =, ;, :, ,, ., /, ?, |, `, ~, [, ], {, } and necessarily Latin letters'})
 
 			#Это не почта
 			if match('.+@.+\..+', x['mail']) == None:
-				return '7'
+				return dumps({'error': 9, 'message': 'Invalid mail'})
 
 			#Неправильное имя
 			if 'name' in x and not x['name'].isalpha():
-				return '9'
+				return dumps({'error': 10, 'message': 'Invalid name'})
 
 			#Неправильная фамилия
 			if 'surname' in x and not x['surname'].isalpha():
-				return '10'
+				return dumps({'error': 11, 'message': 'Invalid surname'})
 
 			try:
 				id = db['users'].find().sort('id', -1)[0]['id'] + 1
@@ -116,9 +144,13 @@ def process():
 			})
 
 			token = generate()
-			db['tokens'].insert({'token': token, 'id': id, 'time': time.time()})
+			db['tokens'].insert({
+				'token': token,
+				'id': id,
+				'time': time.time(),
+			})
 
-			return dumps({'id': id, 'token': token})
+			return dumps({'error': 0, 'id': id, 'token': token})
 
 # db['users'].insert({
 # 	'id': 1,
@@ -136,15 +168,17 @@ def process():
 
 #Авторизация
 		elif x['method'] == 'profile.auth':
-			#Не все поля заполнены
-			if not on(x, ('login', 'pass')):
-				return '3'
+			mes = errors(x, (
+				('login', True, str),
+				('pass', True, str),
+			))
+			if mes: return mes
 
 			x['login'] = x['login'].lower()
 
 			#Логин не существует
 			if not len(list(db['users'].find({'login': x['login']}))):
-				return '4'
+				return dumps({'error': 5, 'message': 'Login does not exist'})
 
 			i = db['users'].find_one({'login': x['login'], 'password': md5(bytes(x['pass'], 'utf-8')).hexdigest()})
 			if i:
@@ -152,18 +186,23 @@ def process():
 
 			#Неправильный пароль
 			else:
-				return '5'
+				dumps({'error': 6, 'message': 'Invalid password'})
 
 			token = generate()
 			db['tokens'].insert({'token': token, 'id': id, 'time': time.time()})
 
-			return dumps({'id': id, 'token': token})
+			return dumps({'error': 0, 'id': id, 'token': token})
 
 #Изменение личной информации
 		elif x['method'] == 'profile.edit':
-			#Не все поля заполнены
-			if not on(x, ('token',)):
-				return '3'
+			mes = errors(x, (
+				('token', True, str),
+				('name', False, str),
+				('surname', False, str),
+				('description', False, str),
+				#('photo', False, str)
+			))
+			if mes: return mes
 
 			i = db['tokens'].find_one({'token': x['token']})
 			if i:
@@ -171,21 +210,21 @@ def process():
 
 			#Несуществует токен
 			else:
-				return '4'
+				return dumps({'error': 5, 'message': 'Token does not exsist'})
 
 			i = db['users'].find_one({'id': id})
 
 			if 'name' in x:
 				#Неправильное имя
 				if not x['name'].isalpha():
-					return '5'
+					return dumps({'error': 6, 'message': 'Invalid name'})
 
 				i['name'] = x['name'].title()
 
 			if 'surname' in x:
 				#Неправильная фамилия
 				if not x['surname'].isalpha():
-					return '6'
+					return dumps({'error': 7, 'message': 'Invalid surname'})
 
 				i['surname'] = x['surname'].title()
 
@@ -200,24 +239,25 @@ def process():
 
 				#Ошибка загрузки фотографии
 				except:
-					return '7'
+					return dumps({'error': 8, 'message': 'Error uploading photo'})
 
-			return '0'
+			return dumps({'error': 0})
 
 #Закрытие сессии
 		elif x['method'] == 'profile.exit':
-			#Не все поля заполнены
-			if not on(x, ('token',)):
-				return '3'
+			mes = errors(x, (
+				('token', True, str),
+			))
+			if mes: return mes
 
 			i = db['tokens'].find_one({'token': x['token']})
 			if i:
 				db['tokens'].remove(i)
-				return '0'
+				return dumps({'error': 0})
 
 			#? Несуществующий токен
 			else:
-				return '4'
+				return dumps({'error': 5, 'message': 'Token does not exsist'})
 
 #Получение категорий
 # 		elif x['method'] == 'categories.gets':
@@ -239,100 +279,17 @@ def process():
 #	'plus': 'ladder',
 # })
 
-#Получение статей #сделать выборку полей
-		elif x['method'] == 'ladders.gets':
-			count = x['count'] if 'count' in x else None
-
-			category = None
-			if 'category' in x:
-				category = [x['category'],]
-				for i in db['categories'].find({'parent': x['category']}):
-					category.append(i['id'])
-				category = {'category': {'$in': category}}
-
-			ladders = []
-			for i in db['ladders'].find(category).sort('priority', -1)[0:count]:
-				del i['_id']
-				
-				ladders.append(i)
-			return dumps(ladders)
-
-#db['ladders'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
-# db['ladders'].insert({
-# 	'id': 1,
-# 	'name': 'Title',
-# 	'priority': 50,
-# 	'cont': 'Text',
-# 	'tags': ['ladder', 'test'],
-# 	'description': 'descr',
-# 	'author': 1,
-# 	'time': 1528238479.252285,
-# 	'category': 1,
-# 	'status': 3, 1 - черновик 2 - на редакцию 3 - опубликовано 4 - скрыто
-# 	'view': [1, 2],
-# 	'like': [1,],
-# 	'dislike': [2,],
-# 	'comment': [],
-# })
-
-#Получение статьи
-		elif x['method'] == 'ladders.get':
-			#Не все поля заполнены
-			if not on(x, ('id',)):
-				return '3'
-
-			i = db['ladders'].find_one({'id': x['id']})
-
-			if i:
-				del i['_id']
-				return dumps(i)
-
-			#Несуществует такой статьи
-			else:
-				return '4'
-
-#Редактирование курса
-		elif x['method'] == 'ladders.edit':
-			#Не все поля заполнены
-			if not on(x, ('id',)):
-				return '3'
-
-			query = db['ladders'].find_one({'id': x['id']})
-
-			#Отсутствует такой курс
-			if not query:
-				return '4'
-
-			if 'name' in x:
-				query['name'] = x['name'].strip()
-			if 'description' in x:
-				query['description'] = x['description'].strip()
-
-			query['status'] = 3 #!
-
-			for i in ('author', 'tags', 'priority'): #'category'
-				if i in x: query[i] = x[i]
-
-			db['ladders'].save(query)
-
-			if 'preview' in x:
-				try:
-					load_image('app/static/load/ladders', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
-
-				#Ошибка загрузки изображения
-				except:
-					return '5'
-
-			return '0'
-
 #Добавление курса
 		elif x['method'] == 'ladders.add':
-			#Не все поля заполнены
-			if not on(x, ('name', 'author', 'tags', 'description')): #, 'category'
-				return '3'
-
-			x['name'] = x['name'].strip()
-			x['description'] = x['description'].strip()
+			mes = errors(x, (
+				('name', True, str),
+				('author', True, str),
+				('tags', True, list, str),
+				('description', True, str),
+				#('category', True, int),
+				('priority', False, int),
+			))
+			if mes: return mes
 
 			try:
 				id = db['ladders'].find().sort('id', -1)[0]['id'] + 1
@@ -358,7 +315,8 @@ def process():
 			}
 
 			for i in ('name', 'author', 'tags', 'description'): #, 'category'
-				if i in x: query[i] = x[i]
+				if i in x:
+					query[i] = x[i]
 
 			db['ladders'].insert(query)
 
@@ -368,29 +326,110 @@ def process():
 
 				#Ошибка загрузки изображения
 				except:
-					return '4'
+					return dumps({'error': 5, 'message': 'Error uploading image'})
 
-			return dumps({'id': id})
+			return dumps({'error': 0, 'id': id})
+
+#Редактирование курса
+		elif x['method'] == 'ladders.edit':
+			mes = errors(x, (
+				('id', True, id),
+			))
+			if mes: return mes
+
+			query = db['ladders'].find_one({'id': x['id']})
+
+			#Отсутствует такой курс
+			if not query:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
+
+			query['status'] = 3 #!
+
+			for i in ('name', 'description', 'author', 'tags', 'priority'): #'category'
+				if i in x: query[i] = x[i]
+
+			db['ladders'].save(query)
+
+			if 'preview' in x:
+				try:
+					load_image('app/static/load/ladders', x['preview'], x['id'], x['file'].split('.')[-1] if 'file' in x else None)
+
+				#Ошибка загрузки изображения
+				except:
+					return dumps({'error': 6, 'message': 'Error uploading image'})
+
+			return dumps({'error': 0})
+
+#Получение курсов #сделать выборку полей
+		elif x['method'] == 'ladders.gets':
+			mes = errors(x, (
+				('count', False, int),
+				('category', False, int)
+			))
+			if mes: return mes
+
+			count = x['count'] if 'count' in x else None
+
+			category = None
+			if 'category' in x:
+				category = [x['category'],]
+				for i in db['categories'].find({'parent': x['category']}):
+					category.append(i['id'])
+				category = {'category': {'$in': category}}
+
+			ladders = db['ladders'].find(category).sort('priority', -1)[0:count]
+
+			return dumps({'error': 0, 'ladders': del_id(ladders)})
+
+#db['ladders'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
+# db['ladders'].insert({
+# 	'id': 1,
+# 	'name': 'Title',
+# 	'priority': 50,
+# 	'cont': 'Text',
+# 	'tags': ['ladder', 'test'],
+# 	'description': 'descr',
+# 	'author': 1,
+# 	'time': 1528238479.252285,
+# 	'category': 1,
+# 	'status': 3, 1 - черновик 2 - на редакцию 3 - опубликовано 4 - скрыто
+# 	'view': [1, 2],
+# 	'like': [1,],
+# 	'dislike': [2,],
+# 	'comment': [],
+# })
+
+#Получение курса
+		elif x['method'] == 'ladders.get':
+			mes = errors(x, (
+				('id', True, int),
+			))
+			if mes: return mes
+
+			i = db['ladders'].find_one({'id': x['id']})
+
+			if i:
+				del i['_id']
+				return dumps({'error': 0, 'ladder': i})
+
+			#Несуществует такого курса
+			else:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
 
 #Добавление шага #добавлять по id #менять местами
 		elif x['method'] == 'step.add':
-			#Не все поля заполнены
-			if not on(x, ('ladder', 'name', 'options')):
-				return '3'
-
-			x['name'] = x['name'].strip()
-			if 'cont' in x: x['cont'] = x['cont'].strip()
+			mes = errors(x, (
+				('ladder', True, int),
+				('name', True, str),
+				('options', True, list, str),
+				('answers', False, list, int)
+			))
+			if mes: return mes
 
 			try:
 				ladder = db['ladders'].find_one({'id': x['ladder']})
 			except:
-				return '4'
-
-			if type(x['options']) != list:
-				return '5'
-
-			if 'answers' in x and (type(x['answers']) != list or any(type(i) != int for i in x['answers'])):
-				return '6'
+				return {'error': 5, 'message': 'Wrong id of ladder'}
 
 			ladder['steps'].append({
 				'name': x['name'],
@@ -401,27 +440,22 @@ def process():
 
 			db['ladders'].save(ladder)
 
-			return dumps({'id': len(ladder['steps'])})
+			return dumps({'error': 0, 'id': len(ladder['steps'])})
 
 #Изменение шага
 		elif x['method'] == 'step.edit':
-			#Не все поля заполнены
-			if not on(x, ('ladder', 'step', 'name', 'options')):
-				return '3' #add type
-
-			x['name'] = x['name'].strip()
-			if 'cont' in x: x['cont'] = x['cont'].strip() #delete
+			mes = errors(x, (
+				('ladder', True, int),
+				('step', True, int),
+				('name', True, str),
+				('options', True, list, str),
+			))
+			if mes: return mes
 
 			try:
 				ladder = db['ladders'].find_one({'id': x['ladder']})
 			except:
-				return '4'
-
-			if type(x['options']) != list:
-				return '5'
-
-			if 'answers' in x and (type(x['answers']) != list or any(type(i) != int for i in x['answers'])):
-				return '6'
+				return dumps({'error': 5, 'message': 'Wrong invalid of ladder'})
 
 			if len(ladder['steps']) > x['step']:
 				ladder['steps'][x['step']] = {
@@ -431,76 +465,73 @@ def process():
 					'answers': x['answers'] if 'answers' in x else [],
 				}
 			else:
-				return '7'
+				return dumps({'error': 6, 'message': 'Wrong id of step'})
 
 			db['ladders'].save(ladder)
 
-			return dumps({'id': len(ladder['steps'])})
+			return dumps({'error': 0})
 
 #Удаление шага
 		elif x['method'] == 'step.delete':
-			#Не все поля заполнены
-			if not on(x, ('ladder', 'step')):
-				return '3'
-
-			if type(x['ladder']) != int:
-				return '4'
+			mes = errors(x, (
+				('ladder', True, int),
+				('step', True, int),
+			))
+			if mes: return mes
 
 			try:
 				ladder = db['ladders'].find_one({'id': x['ladder']})
 			except:
-				return '5'
-
-			if type(x['step']) != int:
-				return '6'
+				return dumps({'error': 5, 'message': 'Wrong id of ladder'})
 
 			if len(ladder['steps']) > x['step']:
 				del ladder['steps'][x['step']]
 			else:
-				return '7'
+				return dumps({'error': 6, 'message': 'Wrong id of step'})
 
 			db['ladders'].save(ladder)
 
-			return dumps({'id': len(ladder['steps'])})
+			return dumps({'error': 0})
 
 #Получение пользователя
 		elif x['method'] == 'users.get':
-			#Не все поля заполнены
-			if not on(x, ('id',)) and not on(x, ('login',)):
-				return '3'
+			mes = errors(x, (
+				('id', True, int),
+				#('login', False, str),
+			))
+			if mes: return mes
 
 			i = db['users'].find_one({'id': x['id']} if 'id' in x else {'login': x['login']})
 
 			if i:
 				del i['_id']
-				return dumps(i)
+				return dumps({'error': 0, 'user': i})
 
 			#Несуществует такого человека
 			else:
-				return '4'
+				return dumps({'error': 5, 'message': 'User does not exsist'})
 
 #Получение экспертов
 		elif x['method'] == 'experts.gets':
-			experts = []
+			mes = errors(x, (
+				('sort', False, int),
+			))
+			if mes: return mes
 
 			if 'sort' in x:
 				users = db['users'].find().sort('rating.' + str(x['sort']), -1)
 			else:
 				users = db['users'].find()
-
-			for i in users:
-				del i['_id']
-				experts.append(i)
 			
-			return dumps(experts)
+			return dumps({'error': 0, 'users': del_id(users)})
 
 #Поиск
 		elif x['method'] == 'search':
 			pass
 
 		else:
-			return '2'
+			return dumps({'error': 2, 'message': 'Wrong method'})
 
 	#Серверная ошибка
 	except:
-		return '1'
+		return dumps({'error': 1, 'message': 'Server error'})
