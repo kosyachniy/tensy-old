@@ -30,6 +30,6 @@ def sys_ladder_edit():
 	req = json.loads(post(LINK, json=req).text)
 
 	if not req['error']:
-		redirect(LINK + 'ladder/' + str(req['id']))
+		return redirect(LINK + 'ladder/' + id)
 	else:
 		return render_template('message.html', cont=req['message'])

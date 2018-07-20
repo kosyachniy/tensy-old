@@ -9,23 +9,27 @@ import markdown
 @app.route('/ladder/<int:ladder>/question/<int:id>/')
 def step(ladder, id):
 	step = loads(post(LINK, json={'method': 'step.get', 'ladder': ladder, 'id': id}).text)
-	step['step']['cont'] = Markup(markdown.markdown(step['step']['cont']))
-	for i in range(len(step['step']['options'])):
-		step['step']['options'][i] = str(Markup(markdown.markdown(step['step']['options'][i]))).replace('<p>', '').replace('</p>', '')
 
-	return render_template('step.html',
-		title = step['step']['name'],
-		description = step['step']['cont'] if step['step']['cont'] else '; '.join(step['step']['options']),
-		tags = step['tags'],
-		url = 'ladder/%d/question/%d' % (ladder, id),
+	if not step['error']:
+		step['step']['cont'] = Markup(markdown.markdown(step['step']['cont']))
+		for i in range(len(step['step']['options'])):
+			step['step']['options'][i] = str(Markup(markdown.markdown(step['step']['options'][i]))).replace('<p>', '').replace('</p>', '')
 
-		user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
+		return render_template('step.html',
+			title = step['step']['name'],
+			description = step['step']['cont'] if step['step']['cont'] else '; '.join(step['step']['options']),
+			tags = step['tags'],
+			url = 'ladder/%d/question/%d' % (ladder, id),
 
-		preview = get_preview,
-		enumerate = enumerate,
-		str = str,
+			user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
-		step = step['step'],
-		ladder = ladder,
-		id = id,
-	)
+			preview = get_preview,
+			enumerate = enumerate,
+			str = str,
+
+			step = step['step'],
+			ladder = ladder,
+			id = id,
+		)
+	else:
+		return render_template('message.html', cont='End.')

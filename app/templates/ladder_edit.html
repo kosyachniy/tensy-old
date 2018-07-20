@@ -33,7 +33,7 @@ $('.preview').on('change', function() {
 
 	<br><br>
 
-	<input type="text" name="tags" placeholder="Tags" value="{{ ','.join(ladder.tags) }}" readonly onfocus="this.removeAttribute('readonly')">
+	<input type="text" name="tags" placeholder="Tags (example: tag 1; tag 2)" value="{{ ';'.join(ladder.tags) }}" readonly onfocus="this.removeAttribute('readonly')">
 	<input type="text" name="priority" placeholder="Priority" value="{{ ladder.priority }}" readonly onfocus="this.removeAttribute('readonly')">
 
 	<input type="submit" value="Edit">
@@ -48,8 +48,8 @@ $('.preview').on('change', function() {
 		<input type="text" name="name" placeholder="Name" value="{{ el.name }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
 		<textarea name="cont" placeholder="Content" class="u-cont">{{ el.cont }}</textarea>
 
-		<textarea name="options" placeholder="Options" class="u-descr" required>{{ ';'.join(el.options) }}</textarea>
-		<input type="text" name="answers" placeholder="Answers" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
+		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required>{{ ';'.join(el.options) }}</textarea>
+		<input type="text" name="answers" placeholder="Answers (example: 0; 1)" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
 
 		<input type="submit" value="Edit">
 	</form>
@@ -63,8 +63,8 @@ $('.preview').on('change', function() {
 		<input type="text" name="name" placeholder="Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
 		<textarea name="cont" placeholder="Content" class="u-cont"></textarea>
 
-		<textarea name="options" placeholder="Options" class="u-descr" required></textarea>
-		<input type="text" name="answers" placeholder="Answers" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
+		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required></textarea>
+		<input type="text" name="answers" placeholder="Answers (example: 0; 1)" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
 
 		<input type="submit" value="Add">
 	</form>

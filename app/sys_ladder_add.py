@@ -15,7 +15,7 @@ def sys_ladder_add():
 		'author': x['author'],
 		'tags': [i.strip() for i in re.compile(r'[a-zA-Zа-яА-Я ]+').findall(x['tags'])],
 		'description': x['description'],
-		'priority': x['priority'],
+		'priority': int(x['priority']),
 	}
 
 	if 'preview' in request.files:
@@ -27,6 +27,6 @@ def sys_ladder_add():
 	req = json.loads(post(LINK, json=req).text)
 
 	if not req['error']:
-		redirect(LINK + 'ladder/' + str(req['id']))
+		return redirect(LINK + 'ladder/' + str(req['id']))
 	else:
 		return render_template('message.html', cont=req['message'])

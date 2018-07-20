@@ -307,7 +307,7 @@ def process():
 				'comment': [],
 				'priority': x['priority'] if 'priority' in x else 500,
 				'steps': [{
-					'name': 'You have read and agreed to <a href="codex">Honor code</a>',
+					'name': 'You have read and agreed to [Honor code](/codex)?',
 					'cont': '',
 					'options': ['Yes', 'No', 'Don\'t understand'],
 					'answers': [0,],
@@ -333,7 +333,7 @@ def process():
 #Редактирование курса
 		elif x['method'] == 'ladders.edit':
 			mes = errors(x, (
-				('id', True, id),
+				('id', True, int),
 			))
 			if mes: return mes
 
