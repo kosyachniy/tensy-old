@@ -9,8 +9,6 @@ from json import dumps
 from random import randint
 from os import listdir, remove
 
-from time import sleep
-
 generate = lambda length=32: ''.join([chr(randint(48, 123)) for i in range(length)])
 
 def max_image(url):
@@ -61,6 +59,13 @@ def del_id(x):
 		del i['_id']
 		y.append(i)
 	return y
+
+
+type_transactions = (
+	'Unknown transaction',
+	'Send tokens',
+	'Tokens for registration',
+)
 
 
 @app.route('/', methods=['POST'])
@@ -141,6 +146,13 @@ def process():
 				'rating': 0,
 				'tokens': 500,
 				'admin': 3,
+				'transactions': [{
+					'type': 2,
+					'count': 500,
+					'user': 0,
+					'out': 0,
+					'time': time.time(),
+				}],
 			})
 
 			token = generate()
@@ -304,7 +316,7 @@ def process():
 					'name': 'You have read and agreed to [Honor code](/codex)?',
 					'cont': '',
 					'options': ['Yes', 'No', 'Don\'t understand'],
-					'answers': [0,],
+					'answers': [1,],
 				},],
 			}
 
@@ -558,18 +570,56 @@ def process():
 			if x['count'] <= 0:
 				return dumps({'error': 5, 'message': 'Invalid count of tokens'})
 
+			now_time = time.time()
+
 			i = db['users'].find_one({'id': user})
+
+			if x['count'] > i['tokens']:
+				return dumps({'error': 6, 'message': 'Not enough tokens!'})
+
 			i['tokens'] -= x['count']
+			i['transactions'].append({
+				'type': 1,
+				'count': x['count'],
+				'user': x['user'],
+				'out': 1,
+				'time': now_time,
+			})
 			db['users'].save(i)
 
 			i = db['users'].find_one({'id': x['user']})
 			if i:
 				i['tokens'] += x['count']
+				i['transactions'].append({
+					'type': 1,
+					'count': x['count'],
+					'user': user,
+					'out': 0,
+					'time': now_time,
+				})
 				db['users'].save(i)
 			else:
 				return dumps({'error': 6, 'message': 'Invalid id of user'})
 
 			return dumps({'error': 0})
+
+#Получение истории транзакций
+		elif x['method'] == 'tokens.history':
+			mes = errors(x, (
+				('token', True, str),
+			))
+			if mes: return mes
+
+			history = db['users'].find_one({'id': user})['transactions']
+
+			for i, el in enumerate(history):
+				history[i]['message'] = type_transactions[el['type']]
+				if el['user'] > 0:
+					history[i]['login'] = db['users'].find_one({'id': el['user']})['login']
+				else:
+					del history[i]['user']
+
+			return dumps({'error': 0, 'history': history})
 
 #Поиск
 		elif x['method'] == 'search':

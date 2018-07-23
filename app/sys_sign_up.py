@@ -17,7 +17,7 @@ def signup():
 		'pass': x['pass'],
 		'mail': x['mail'],
 		'name': x['name'],
-		'surname': x['surname']
+		'surname': x['surname'],
 	}).text)
 
 	if not req['error']:

@@ -25,6 +25,7 @@ from app import admin
 
 from app import login
 from app import cabinet
+from app import wallet
 
 from app import errors
 

@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<style>
+.u-tag {
+	background-color: var(--quote);
+	font-size: 0.9em;
+	padding: 12px;
+	border-radius: 15px;
+	margin: 3px 7px 3px 7px;
+}
+</style>
+
+<h2 class="u-title">History<!--  &nbsp; <a href="?edit=1"><img src="/static/add.svg" alt="Add" title="Add"></a> --></h2>
+
+{% for i in history %}
+<br><hr><br>
+
+<!-- <div class="u-tag">{{ i }}</div><br><br> -->
+
+<div class="u-block">
+	<h2 class="u-stat"><img src="/static/{% if i.out %}minus{% else %}plus{% endif %}.svg" alt="{% if i.out %}Minus{% else %}Plus{% endif %}" title="{% if i.out %}Minus{% else %}Plus{% endif %}"> &nbsp; {{ i.message }}</h2>
+
+	<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens" title="Tokens"> &nbsp; {{ i.count }}</h2>
+
+{% if i.user %}
+	<h2 class="u-stat"><img src="/static/{% if i.out %}for{% else %}from{% endif %}.svg" alt="{% if i.out %}For{% else %}From{% endif %}" title="{% if i.out %}For{% else %}From{% endif %}"> &nbsp; <a href="/user/{{ i.user }}">@{{ i.login }}</a></h2>
+{% endif %}
+
+	<h2 class="u-stat"><img src="/static/time.svg" alt="Time" title="Time"> &nbsp; {{ time(i.time) }}</h2>
+</div>
+{% endfor %}
+
+<br><br>
+
+{% endblock %}

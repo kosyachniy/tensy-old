@@ -25,7 +25,7 @@ code {
 
 <form action="/sys_step_check?ladder={{ ladder }}&step={{ id }}" method="post" enctype="multipart/form-data">
 {% for i, el in enumerate(step.options) %}
-	<div class="u-check"><input type="checkbox" name="{{ i }}" value="1"> &nbsp; {{ el }}</div>
+	<div class="u-check"><input type="checkbox" name="{{ i+1 }}" value="1"> &nbsp; {{ el }}</div>
 {% endfor %}
 
 	<input type="submit" value="Answer">

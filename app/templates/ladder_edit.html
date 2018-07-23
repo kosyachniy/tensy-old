@@ -48,7 +48,7 @@ $('.preview').on('change', function() {
 		<textarea name="cont" placeholder="Content" class="u-cont">{{ el.cont }}</textarea>
 
 		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required>{{ ';'.join(el.options) }}</textarea>
-		<input type="text" name="answers" placeholder="Answers (example: 0; 1)" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
+		<input type="text" name="answers" placeholder="Answers (example: 1; 2)" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
 
 		<input type="submit" value="Edit">
 	</form>
@@ -63,7 +63,7 @@ $('.preview').on('change', function() {
 		<textarea name="cont" placeholder="Content" class="u-cont"></textarea>
 
 		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required></textarea>
-		<input type="text" name="answers" placeholder="Answers (example: 0; 1)" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
+		<input type="text" name="answers" placeholder="Answers (example: 1; 2)" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
 
 		<input type="submit" value="Add">
 	</form>
