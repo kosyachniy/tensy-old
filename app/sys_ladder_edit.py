@@ -15,10 +15,9 @@ def sys_ladder_edit():
 		'id': int(id),
 		'name': x['name'],
 		# 'category': int(x['category']),
-		'author': x['author'],
 		'tags': [i.strip() for i in re.compile(r'[a-zA-Zа-яА-Я ]+').findall(x['tags'])],
 		'description': x['description'],
-		'priority': x['priority'] if 'priority' in x else 500,
+		'priority': int(x['priority']) if 'priority' in x else 500,
 	}
 
 	if 'preview' in request.files:

@@ -11,13 +11,16 @@ def cabinet():
 
 	if 'token' in session:
 		return render_template('cabinet.html',
-			title = 'Personal area',
-			description = 'Personal area, settings, account, profile',
-			url = x if x else 'cabinet',
+			title = 'Profile',
+			description = 'Profile, personal area, settings, account',
+			tags = ['profile', 'personal area', 'settings', 'account'],
+			url = 'cabinet',
 
 			user = loads(post(LINK, json={'method': 'users.get', 'id': session['id']}).text)['user'] if 'id' in session else {'id': 0, 'admin': 2},
 
 			preview = get_preview,
+
+			loc = x if x else 'cabinet',
 		)
 
 	else:

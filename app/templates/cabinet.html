@@ -15,7 +15,7 @@ img {
 <h2 class="title2">Update avatar</h2>
 <img src="{{ preview('users', user.id) }}"><br>
 
-<form action="/sys_profile_edit?url={{ url }}" method="post" enctype="multipart/form-data">
+<form action="/sys_profile_edit?url={{ loc }}" method="post" enctype="multipart/form-data">
 	<input type="file" name="photo" class="photo" id="photo">
 	<label for="photo">Select photo</label>
 	<script>

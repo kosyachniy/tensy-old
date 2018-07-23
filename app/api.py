@@ -283,9 +283,8 @@ def process():
 		elif x['method'] == 'ladders.add':
 			mes = errors(x, (
 				('name', True, str),
-				('author', True, str),
-				('tags', True, list, str),
 				('description', True, str),
+				('tags', True, list, str),
 				#('category', True, int),
 				('priority', False, int),
 			))
@@ -314,7 +313,7 @@ def process():
 				},],
 			}
 
-			for i in ('name', 'author', 'tags', 'description'): #, 'category'
+			for i in ('name', 'tags', 'description'): #, 'category'
 				if i in x:
 					query[i] = x[i]
 
@@ -334,6 +333,10 @@ def process():
 		elif x['method'] == 'ladders.edit':
 			mes = errors(x, (
 				('id', True, int),
+				('name', False, str),
+				('description', False, str),
+				('tags', False, list, str),
+				('priority', False, int),
 			))
 			if mes: return mes
 
@@ -345,7 +348,7 @@ def process():
 
 			query['status'] = 3 #!
 
-			for i in ('name', 'description', 'author', 'tags', 'priority'): #'category'
+			for i in ('name', 'description', 'tags', 'priority'): #'category'
 				if i in x: query[i] = x[i]
 
 			db['ladders'].save(query)
@@ -437,6 +440,7 @@ def process():
 				'cont': x['cont'] if 'cont' in x else '',
 				'options': [i.strip() for i in x['options']],
 				'answers': x['answers'] if 'answers' in x else [],
+				'user': user,
 				})
 
 			db['ladders'].save(ladder)
