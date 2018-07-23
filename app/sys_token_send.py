@@ -4,23 +4,19 @@ from app import app, LINK
 from requests import post
 import json
 
-@app.route('/sys_step_delete')
-def sys_step_delete():
-	print('OKK')
-
+@app.route('/sys_token_send', methods=['POST'])
+def sys_token_send():
 	x = request.form
-	id = request.args.get('ladder')
-
-	print('OKK')
+	id = request.args.get('user')
 
 	req = json.loads(post(LINK, json={
-		'method': 'step.delete',
+		'method': 'tokens.send',
 		'token': session['token'],
-		'ladder': int(id),
-		'step': int(request.args.get('step')),
+		'count': int(x['count']),
+		'user': int(id),
 	}).text)
 
 	if not req['error']:
-		return redirect(LINK + 'ladder/' + id + '/?edit=1')
+		return redirect(LINK + 'user/' + id)
 	else:
 		return render_template('message.html', cont=req['message'])

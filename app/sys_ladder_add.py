@@ -10,6 +10,7 @@ def sys_ladder_add():
 
 	req = {
 		'method': 'ladders.add',
+		'token': session['token'],
 		'name': x['name'],
 		# 'category': int(x['category']),
 		'tags': [i.strip() for i in re.compile(r'[a-zA-Zа-яА-Я ]+').findall(x['tags'])],

@@ -11,6 +11,7 @@ def sys_step_add():
 
 	req = {
 		'method': 'step.add',
+		'token': session['token'],
 		'name': x['name'],
 		'ladder': int(id),
 		'cont': x['cont'],

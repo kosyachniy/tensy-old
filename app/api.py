@@ -204,15 +204,10 @@ def process():
 			))
 			if mes: return mes
 
-			i = db['tokens'].find_one({'token': x['token']})
-			if i:
-				id = i['id']
+			if not user:
+				return dumps({'error': 5, 'message': 'Invalid token'})
 
-			#Несуществует токен
-			else:
-				return dumps({'error': 5, 'message': 'Token does not exsist'})
-
-			i = db['users'].find_one({'id': id})
+			i = db['users'].find_one({'id': user})
 
 			if 'name' in x:
 				#Неправильное имя
@@ -235,7 +230,7 @@ def process():
 
 			if 'photo' in x:
 				try:
-					load_image('app/static/load/users', x['photo'], id)
+					load_image('app/static/load/users', x['photo'], user)
 
 				#Ошибка загрузки фотографии
 				except:
@@ -257,7 +252,7 @@ def process():
 
 			#? Несуществующий токен
 			else:
-				return dumps({'error': 5, 'message': 'Token does not exsist'})
+				return dumps({'error': 5, 'message': 'Invalid token'})
 
 #Получение категорий
 # 		elif x['method'] == 'categories.gets':
@@ -550,6 +545,31 @@ def process():
 			#Несуществует такого курса
 			else:
 				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
+
+#Отправить токены
+		elif x['method'] == 'tokens.send':
+			mes = errors(x, (
+				('token', True, str),
+				('count', True, int),
+				('user', True, int),
+			))
+			if mes: return mes
+
+			if x['count'] <= 0:
+				return dumps({'error': 5, 'message': 'Invalid count of tokens'})
+
+			i = db['users'].find_one({'id': user})
+			i['tokens'] -= x['count']
+			db['users'].save(i)
+
+			i = db['users'].find_one({'id': x['user']})
+			if i:
+				i['tokens'] += x['count']
+				db['users'].save(i)
+			else:
+				return dumps({'error': 6, 'message': 'Invalid id of user'})
+
+			return dumps({'error': 0})
 
 #Поиск
 		elif x['method'] == 'search':

@@ -290,9 +290,9 @@ textarea.u-descr {
 }
 
 .u-menu .u-add {
-	width: 1.3rem;
+	min-width: 1.3rem;
 	height: 1.3rem;
-	padding: 0;
+	padding: 0 0.3rem 0 0.3rem;
 	text-align: center;
 	background-color: var(--font-black); /*var(--menu-hover);*/
 	color: var(--font-white);

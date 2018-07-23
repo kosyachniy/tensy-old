@@ -11,6 +11,7 @@ def sys_step_edit():
 
 	req = {
 		'method': 'step.edit',
+		'token': session['token'],
 		'name': x['name'],
 		'ladder': int(id),
 		'step': int(request.args.get('step')),

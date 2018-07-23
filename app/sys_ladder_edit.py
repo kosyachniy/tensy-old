@@ -12,6 +12,7 @@ def sys_ladder_edit():
 
 	req = {
 		'method': 'ladders.edit',
+		'token': session['token'],
 		'id': int(id),
 		'name': x['name'],
 		# 'category': int(x['category']),

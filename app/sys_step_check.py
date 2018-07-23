@@ -10,7 +10,12 @@ def sys_step_check():
 	ladder = request.args.get('ladder')
 	id = request.args.get('step')
 
-	step = json.loads(post(LINK, json={'method': 'step.get', 'ladder': int(ladder), 'id': int(id)}).text)['step']
+	step = json.loads(post(LINK, json={
+		'method': 'step.get',
+		'token': session['token'],
+		'ladder': int(ladder),
+		'id': int(id),
+	}).text)['step']
 
 	print([[str(i) in x] for i in range(len(step['options']))])
 

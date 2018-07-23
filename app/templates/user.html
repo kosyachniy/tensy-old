@@ -23,9 +23,22 @@
 		margin: 10px 0 10px 0;
 	}
 
+	.u-token input {
+		width: calc(50% - 14px);
+		margin: 7px;
+	}
+
 	@media all and (max-width: 640px) {
 		.u-block-photo, .u-block-info {
 			width: 100%;
+		}
+
+		.u-token input {
+			width: calc(100% - 14px);
+		}
+
+		.u-token input:first-child {
+			margin-top: 25px;
 		}
 	}
 </style>
@@ -40,6 +53,14 @@
 	<br>
 	{{ users.description }}
 </div>
+
+{% if user.id and user.id != users.id %}
+<br>
+
+<form action="/sys_token_send?user={{ users.id }}" method="post" enctype="multipart/form-data" class="u-token">
+	<input type="text" name="count" placeholder="Count" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required><input type="submit" value="Send tokens">
+</form>
+{% endif %}
 
 <br><br>
 

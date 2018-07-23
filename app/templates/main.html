@@ -58,7 +58,7 @@
 {% if user.admin and user.admin >= 3 %}
 			<hr>
 
-			<div onclick="location.href='/cabinet'"{% if 'cabinet' in url %} class="u-selected"{% endif %}>Profile</div>
+			<div onclick="location.href='/cabinet'"{% if 'cabinet' in url %} class="u-selected"{% endif %}>Profile <a href="/wallet" class="u-add" style="padding-top: 1px;">{{ user.tokens }}</a></div>
 
 {% if user.admin >= 6 %}
 			<div onclick="location.href='/admin'"{% if 'admin' in url %} class="u-selected"{% endif %}>Admin</div>
