@@ -153,6 +153,7 @@ def process():
 					'out': 0,
 					'time': time.time(),
 				}],
+				'ladders': [],
 			})
 
 			token = generate()
@@ -461,6 +462,7 @@ def process():
 				('step', True, int),
 				('name', True, str),
 				('options', True, list, str),
+				('answers', False, list, int),
 			))
 			if mes: return mes
 
@@ -505,6 +507,50 @@ def process():
 
 			return dumps({'error': 0})
 
+#Получение ступени
+		elif x['method'] == 'step.get':
+			mes = errors(x, (
+				('ladder', True, int),
+				('id', True, int),
+			))
+			if mes: return mes
+
+			i = db['ladders'].find_one({'id': x['ladder']})
+
+			if i:
+				if len(i['steps']) > x['id']:
+					del i['steps'][x['id']]['answers']
+					return dumps({'error': 0, 'step': i['steps'][x['id']], 'name': i['name'], 'tags': i['tags']})
+
+				else:
+					return dumps({'error': 6, 'message': 'Step does not exsist'})
+
+			#Несуществует такого курса
+			else:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
+
+#Проверка ответов
+		elif x['method'] == 'step.check':
+			mes = errors(x, (
+				('ladder', True, int),
+				('step', True, int),
+				('answers', True, list, int),
+			))
+			if mes: return mes
+
+			i = db['ladders'].find_one({'id': x['ladder']})
+
+			if i:
+				if len(i['steps']) > x['step']:
+					return dumps({'error': 0, 'correct': set(x['answers']) == set(i['steps'][x['step']]['answers'])})
+
+				else:
+					return dumps({'error': 6, 'message': 'Step does not exsist'})
+
+			#Несуществует такого курса
+			else:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
+
 #Получение пользователя
 		elif x['method'] == 'users.get':
 			mes = errors(x, (
@@ -536,27 +582,6 @@ def process():
 				users = db['users'].find()
 			
 			return dumps({'error': 0, 'users': del_id(users)})
-
-#Получение ступени
-		elif x['method'] == 'step.get':
-			mes = errors(x, (
-				('ladder', True, int),
-				('id', True, int),
-			))
-			if mes: return mes
-
-			i = db['ladders'].find_one({'id': x['ladder']})
-
-			if i:
-				if len(i['steps']) > x['id']:
-					return dumps({'error': 0, 'step': i['steps'][x['id']], 'name': i['name'], 'tags': i['tags']})
-
-				else:
-					return dumps({'error': 6, 'message': 'Step does not exsist'})
-
-			#Несуществует такого курса
-			else:
-				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
 
 #Отправить токены
 		elif x['method'] == 'tokens.send':
