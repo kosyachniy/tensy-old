@@ -1,4 +1,4 @@
-from flask import render_template, session, request, Markup
+from flask import render_template, session, request, Markup, redirect
 from app import app, LINK, get_preview
 
 from requests import post

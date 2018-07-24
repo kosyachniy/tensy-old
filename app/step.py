@@ -4,6 +4,7 @@ from app import app, LINK, get_preview
 from requests import post
 from json import loads
 import markdown
+import re
 
 @app.route('/ladder/<int:ladder>/question/<int:id>')
 @app.route('/ladder/<int:ladder>/question/<int:id>/')
@@ -13,11 +14,11 @@ def step(ladder, id):
 	if not step['error']:
 		step['step']['cont'] = Markup(markdown.markdown(step['step']['cont']))
 		for i in range(len(step['step']['options'])):
-			step['step']['options'][i] = str(Markup(markdown.markdown(step['step']['options'][i]))).replace('<p>', '').replace('</p>', '')
+			step['step']['options'][i] = Markup(markdown.markdown(step['step']['options'][i]))
 
 		return render_template('step.html',
 			title = step['step']['name'],
-			description = step['step']['cont'] if step['step']['cont'] else '; '.join(step['step']['options']),
+			description = re.sub(r'\<[^>]*\>', '', step['step']['cont']) + '\n' + '; '.join([re.sub(r'\<[^>]*\>', '', i) for i in step['step']['options']]),
 			tags = step['tags'],
 			url = 'ladder/%d/question/%d' % (ladder, id),
 

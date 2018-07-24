@@ -4,6 +4,8 @@
 <style>
 img {width: 100%;}
 
+.u-block a {color: blue;}
+
 code {
 	border: 0px !important; /*1px solid var(--border-active);*/
 	padding: 5px 10px 5px 10px !important;
@@ -17,15 +19,25 @@ code {
 	padding: 10px;
 	width: 100%;
 }
+
+p {
+	margin: 0;
+}
 </style>
 
 <h2 class="u-title">{{ step.name }} &nbsp; <a href="../../study/{{ id }}"><img src="/static/help.svg" alt="Help" title="Help"></a></h2>
 
-{{ step.cont }}
+{% if step.cont %}
+<br>
+<div class="u-block">
+	{{ step.cont }}
+</div>
+<br><br>
+{% endif %}
 
 <form action="/sys_step_check?ladder={{ ladder }}&step={{ id }}" method="post" enctype="multipart/form-data">
 {% for i, el in enumerate(step.options) %}
-	<div class="u-check"><input type="checkbox" name="{{ i+1 }}" value="1"> &nbsp; {{ el }}</div>
+	<div class="u-check"><input type="checkbox" name="{{ i+1 }}" value="1"> &nbsp; <div>{{ el }}</div></div>
 {% endfor %}
 
 	<input type="submit" value="Answer">

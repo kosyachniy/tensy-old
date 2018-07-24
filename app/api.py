@@ -290,6 +290,7 @@ def process():
 #Добавление курса
 		elif x['method'] == 'ladders.add':
 			mes = errors(x, (
+				('token', True, str),
 				('name', True, str),
 				('description', True, str),
 				('tags', True, list, str),
@@ -314,8 +315,8 @@ def process():
 				'comment': [],
 				'priority': x['priority'] if 'priority' in x else 500,
 				'steps': [{
-					'name': 'You have read and agreed to [Honor code](/codex)?',
-					'cont': '',
+					'name': 'You have read and agreed to Honor code?',
+					'cont': '[Link to Honor code](/codex)',
 					'options': ['Yes', 'No', 'Don\'t understand'],
 					'answers': [1,],
 				},],
@@ -340,6 +341,7 @@ def process():
 #Редактирование курса
 		elif x['method'] == 'ladders.edit':
 			mes = errors(x, (
+				('token', True, str),
 				('id', True, int),
 				('name', False, str),
 				('description', False, str),
@@ -430,6 +432,7 @@ def process():
 #Добавление шага #добавлять по id #менять местами
 		elif x['method'] == 'step.add':
 			mes = errors(x, (
+				('token', True, str),
 				('ladder', True, int),
 				('name', True, str),
 				('options', True, list, str),
@@ -458,6 +461,7 @@ def process():
 #Изменение шага
 		elif x['method'] == 'step.edit':
 			mes = errors(x, (
+				('token', True, str),
 				('ladder', True, int),
 				('step', True, int),
 				('name', True, str),
@@ -488,6 +492,7 @@ def process():
 #Удаление шага
 		elif x['method'] == 'step.delete':
 			mes = errors(x, (
+				('token', True, str),
 				('ladder', True, int),
 				('step', True, int),
 			))
@@ -532,6 +537,7 @@ def process():
 #Проверка ответов
 		elif x['method'] == 'step.check':
 			mes = errors(x, (
+				('token', True, str),
 				('ladder', True, int),
 				('step', True, int),
 				('answers', True, list, int),

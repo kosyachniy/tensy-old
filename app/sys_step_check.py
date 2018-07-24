@@ -10,13 +10,18 @@ def sys_step_check():
 	ladder = request.args.get('ladder')
 	id = request.args.get('step')
 
-	correct = json.loads(post(LINK, json={
+	if 'token' not in session:
+		return redirect(LINK + 'login?url=ladder/' + ladder + '/question/' + id)
+
+	req = {
 		'method': 'step.check',
 		'token': session['token'],
 		'ladder': int(ladder),
 		'step': int(id),
 		'answers': [int(i) for i in x if x[i] == '1'],
-	}).text)['correct']
+	}
+
+	correct = json.loads(post(LINK, json=req).text)['correct']
 
 	if correct:
 		return redirect(LINK + 'ladder/' + ladder + '/question/' + str(int(id)+1))

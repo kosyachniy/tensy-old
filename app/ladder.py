@@ -1,4 +1,4 @@
-from flask import render_template, session, request, Markup
+from flask import render_template, session, request, Markup, redirect
 from app import app, LINK, get_preview
 
 from requests import post
@@ -15,6 +15,9 @@ def ladder(id):
 	edit = request.args.get('edit')
 
 	answers = lambda x: ';'.join([str(i) for i in x])
+
+	if edit and 'token' not in session:
+		return redirect(LINK + 'login?url=ladder/%d?edit=1' % ladder['id'])
 
 	return render_template('ladder_edit.html' if edit else 'ladder.html',
 		title = ladder['name'],
