@@ -1,6 +1,9 @@
 {% extends "main.html" %}
 {% block cont %}
 
+{% from 'list_note.html' import list_note %}
+{% from 'list_user.html' import list_user %}
+
 <div class="u-info" onclick="change();">↑ Tap on the logo ↑</div>
 
 <script>
@@ -9,17 +12,13 @@ place('.u-notes', 3, 100, 12, 7, 850, 450);
 
 <a href="/ladders"><div class="u-title">Ladders</div></a>
 
-<div class="u-notes">
-	{% for i in ladders %}<a href="/ladder/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('ladders', i.id) }}");"></div><div class="u-text">{{ i.name }}</div></div></a>{% endfor %}
-</div>
+{{ list_note(ladders, preview) }}
 
 <br><br>
 
 <a href="/experts"><div class="u-title">Experts</div></a>
 
-<div class="u-notes">
-	{% for i in experts %}<a href="/user/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('users', i.id) }}");"></div><div class="u-text">{{ i.surname }} {{ i.name }}<p>@{{ i.login }}</p></div></div></a>{% endfor %}
-</div>
+{{ list_user(experts, preview) }}
 
 <br><br>
 <!-- 

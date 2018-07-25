@@ -320,6 +320,7 @@ def process():
 					'options': ['Yes', 'No', 'Don\'t understand'],
 					'answers': [1,],
 					'theory': '[Link to Honor code](/codex)',
+					'user': user,
 				},],
 			}
 
@@ -528,6 +529,15 @@ def process():
 			if i:
 				if len(i['steps']) > x['step']:
 					del i['steps'][x['step']]['answers']
+
+					req = db['users'].find_one({'id': i['steps'][x['step']]['user']})
+					i['steps'][x['step']]['user'] = {
+						'id': req['id'],
+						'login': req['login'],
+						'name': req['name'],
+						'surname': req['surname'],
+					}
+
 					return dumps({'error': 0, 'step': i['steps'][x['step']], 'name': i['name'], 'tags': i['tags']})
 
 				else:

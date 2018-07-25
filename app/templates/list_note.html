@@ -1,0 +1,5 @@
+{% macro list_note(ladders, preview) %}
+<div class="u-notes">
+	{% for i in ladders %}<a href="/ladder/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('ladders', i.id) }}");"></div><div class="u-text">{{ i.name }}</div></div></a>{% endfor %}
+</div>
+{% endmacro %}

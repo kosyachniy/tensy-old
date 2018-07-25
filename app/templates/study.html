@@ -1,6 +1,25 @@
 {% extends "main.html" %}
 {% block cont %}
 
+{% macro block(id, name, login, price, rating) %}
+	<a href="/space/?user={{ id }}&ladder={{ ladder }}&step={{ step }}">
+		<div>
+			<div class="u-notes2-img">
+				<img src="{% if id %}{{ preview('users', id) }}{% else %}/static/bot.svg{% endif %}">
+			</div><div class="u-notes2-cont">
+				<h2 class="u-title">&nbsp; {{ name }}</h2>
+				{% if login %}<p>@{{ login }}</p>{% endif %}
+				<div>
+					{% if rating %}<h2 class="u-stat"><img src="/static/rating.svg" alt="Rating" title="Rating"> {{ rating }}</h2>{% endif %}
+					<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens" title="Tokens"> {{ price }}</h2>
+				</div>
+			</div><!-- <div class="u-notes2-add">
+				<div>Start</div>
+			</div> -->
+		</div>
+	</a>
+{% endmacro %}
+
 <style>
 .u-notes2, .u-notes2 a {
 	width: 100%;
@@ -58,59 +77,16 @@
 <br><br>
 
 <div class="u-notes2">
-	<a href="/space/?user=0&ladder={{ ladder }}&step={{ step }}">
-		<div>
-			<div class="u-notes2-img">
-				<img src="/static/bot.svg">
-			</div><div class="u-notes2-cont">
-				<h2 class="u-title">&nbsp; Bot</h2>
-				<div>
-					<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens" title="Tokens"> {{ bot.price }}</h2>
-				</div>
-			</div><!-- <div class="u-notes2-add">
-				<div>Start</div>
-			</div> -->
-		</div>
-	</a>
+{{ block(0, 'Bot', '', bot.price, 0) }}
 
 <br><br><<< Here is the list of teachers >>>
 
 {% for i in teachers %}
-	<a href="/space/?user={{ i.id }}&ladder={{ ladder }}&step={{ step }}">
-		<div>
-			<div class="u-notes2-img">
-				<img src="{{ preview('users', i.id) }}">
-			</div><div class="u-notes2-cont">
-				<h2 class="u-title">&nbsp; {{ i.surname }} {{ i.name }}</h2>
-				<p>@{{ i.login }}</p>
-				<div>
-					<h2 class="u-stat"><img src="/static/rating.svg" alt="Rating" title="Rating"> {{ i.rating }}</h2>
-					<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens" title="Tokens"> {{ i.price }}</h2>
-				</div>
-			</div><!-- <div class="u-notes2-add">
-				<div>Start</div>
-			</div> -->
-		</div>
-	</a>
+{{ block(i.id, i.surname + ' ' + i.name, '@' + i.login, i.price, i.rating) }}
 {% endfor %}
 
 {% for i in users %}
-	<a href="/space/?user={{ i.id }}&ladder={{ ladder }}&step={{ step }}">
-		<div>
-			<div class="u-notes2-img">
-				<img src="{{ preview('users', i.id) }}">
-			</div><div class="u-notes2-cont">
-				<h2 class="u-title">&nbsp;{{ i.surname }} {{ i.name }}</h2>
-				<p>@{{ i.login }}</p>
-				<div>
-					<h2 class="u-stat"><img src="/static/rating.svg" alt="Rating" title="Rating"> {{ i.rating }}</h2>
-					<h2 class="u-stat"><img src="/static/token.svg" alt="Tokens" title="Tokens"> {{ i.price }}</h2>
-				</div>
-			</div><!-- <div class="u-notes2-add">
-				<div>Start</div>
-			</div> -->
-		</div>
-	</a>
+{{ block(i.id, i.surname + ' ' + i.name, '@' + i.login, i.price, i.rating) }}
 {% endfor %}
 
 </div>

@@ -1,0 +1,5 @@
+{% macro list_user(experts, preview) %}
+<div class="u-notes">
+	{% for i in experts %}<a href="/user/{{ i.id }}"><div><div class="u-img" style="background-image: url({{ preview('users', i.id) }}");"></div><div class="u-text">{{ i.surname }} {{ i.name }}<p>@{{ i.login }}</p></div></div></a>{% endfor %}
+</div>
+{% endmacro %}
