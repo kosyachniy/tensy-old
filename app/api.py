@@ -319,6 +319,7 @@ def process():
 					'cont': '[Link to Honor code](/codex)',
 					'options': ['Yes', 'No', 'Don\'t understand'],
 					'answers': [1,],
+					'theory': '[Link to Honor code](/codex)',
 				},],
 			}
 
@@ -438,6 +439,7 @@ def process():
 				('options', True, list, str),
 				('answers', False, list, int),
 				('cont', False, str),
+				('theory', True, str),
 			))
 			if mes: return mes
 
@@ -464,9 +466,11 @@ def process():
 				('token', True, str),
 				('ladder', True, int),
 				('step', True, int),
-				('name', True, str),
-				('options', True, list, str),
+				('name', False, str),
+				('options', False, list, str),
 				('answers', False, list, int),
+				('cont', False, str),
+				('theory', False, str),
 			))
 			if mes: return mes
 
@@ -476,12 +480,11 @@ def process():
 				return dumps({'error': 5, 'message': 'Wrong invalid of ladder'})
 
 			if len(ladder['steps']) > x['step']:
-				ladder['steps'][x['step']] = {
-					'name': x['name'],
-					'cont': x['cont'] if 'cont' in x else '',
-					'options': [i.strip() for i in x['options']],
-					'answers': x['answers'] if 'answers' in x else [],
-				}
+				for i in ('name', 'options', 'answers', 'cont', 'theory'):
+					if i in x:
+						if type(x[i]) == list and type(x[i][0]) == str:
+							x[i] = [j.strip() for j in x[i]]
+						ladder['steps'][x['step']][i] = x[i]
 			else:
 				return dumps({'error': 6, 'message': 'Wrong id of step'})
 
@@ -516,16 +519,16 @@ def process():
 		elif x['method'] == 'step.get':
 			mes = errors(x, (
 				('ladder', True, int),
-				('id', True, int),
+				('step', True, int),
 			))
 			if mes: return mes
 
 			i = db['ladders'].find_one({'id': x['ladder']})
 
 			if i:
-				if len(i['steps']) > x['id']:
-					del i['steps'][x['id']]['answers']
-					return dumps({'error': 0, 'step': i['steps'][x['id']], 'name': i['name'], 'tags': i['tags']})
+				if len(i['steps']) > x['step']:
+					del i['steps'][x['step']]['answers']
+					return dumps({'error': 0, 'step': i['steps'][x['step']], 'name': i['name'], 'tags': i['tags']})
 
 				else:
 					return dumps({'error': 6, 'message': 'Step does not exsist'})
@@ -549,6 +552,35 @@ def process():
 			if i:
 				if len(i['steps']) > x['step']:
 					return dumps({'error': 0, 'correct': set(x['answers']) == set(i['steps'][x['step']]['answers'])})
+
+				else:
+					return dumps({'error': 6, 'message': 'Step does not exsist'})
+
+			#Несуществует такого курса
+			else:
+				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
+
+#Проверка ответов
+		elif x['method'] == 'step.study':
+			mes = errors(x, (
+				('token', True, str),
+				('ladder', True, int),
+				('step', True, int),
+			))
+			if mes: return mes
+
+			i = db['ladders'].find_one({'id': x['ladder']})
+
+			if i:
+				if len(i['steps']) > x['step']:
+					return dumps({
+						'error': 0,
+						'bot': {
+							'price': 10,
+						},
+						'teachers': [],
+						'users': [],
+					})
 
 				else:
 					return dumps({'error': 6, 'message': 'Step does not exsist'})

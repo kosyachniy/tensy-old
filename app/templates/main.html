@@ -53,7 +53,7 @@
 			<hr>
 			
 			<div onclick="location.href='/ladders'"{% if 'ladder' in url  %} class="u-selected"{% endif %}>Ladders <a href="/admin/add/ladder" class="u-add">+</a></div>
-			<div onclick="location.href='/experts'"{% if 'experts' in url or 'user' in url %} class="u-selected"{% endif %}>Experts</div>
+			<div onclick="location.href='/experts'"{% if 'experts' in url or 'user' in url and 'space' not in url %} class="u-selected"{% endif %}>Experts</div>
 
 {% if user.admin and user.admin >= 3 %}
 			<hr>

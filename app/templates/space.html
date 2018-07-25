@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+{% block cont %}
+
+<style>
+img {width: 100%;}
+
+.u-block a {color: blue;}
+
+code {
+	border: 0px !important; /*1px solid var(--border-active);*/
+	padding: 5px 10px 5px 10px !important;
+	border-radius: 7px;
+	background-color: var(--quote);
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 13.5px;
+}
+
+.u-check {
+	padding: 10px;
+	width: 100%;
+}
+
+p {
+	margin: 0;
+}
+</style>
+
+<h2 class="u-title">{{ ladder }} / {{ step }}</h2>
+<!-- {{ users }} -->
+
+<br>
+
+<div class="u-block">
+	{{ theory }}
+</div>
+
+<br><br>
+
+<input type="submit" value="Question" onclick="location.href='/ladder/{{ ladder_id }}/question/{{ step_id }}';">
+
+<br><br>
+
+{% endblock %}

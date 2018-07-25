@@ -15,6 +15,7 @@ def sys_step_add():
 		'name': x['name'],
 		'ladder': int(id),
 		'cont': x['cont'],
+		'theory': x['theory'],
 		'options': x['options'].split(';'),
 	}
 

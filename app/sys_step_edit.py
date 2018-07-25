@@ -16,6 +16,7 @@ def sys_step_edit():
 		'ladder': int(id),
 		'step': int(request.args.get('step')),
 		'cont': x['cont'],
+		'theory': x['theory'],
 		'options': x['options'].split(';'),
 	}
 

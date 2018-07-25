@@ -48,3 +48,6 @@ from app import ladder
 from app import ladders
 from app import ladder_add
 from app import step
+from app import study
+
+from app import space
