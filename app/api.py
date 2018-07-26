@@ -294,7 +294,7 @@ def process():
 				'id': id,
 				'user': user,
 				'time': time.time(),
-				'status': 3, #!
+				'status': 1,
 				'view': [user,],
 				'like': [],
 				'dislike': [],
@@ -343,8 +343,6 @@ def process():
 			#Отсутствует такой курс
 			if not query:
 				return dumps({'error': 5, 'message': 'Ladder does not exsist'})
-
-			query['status'] = 3 #!
 
 			for i in ('name', 'description', 'tags', 'priority'): #'category'
 				if i in x: query[i] = x[i]

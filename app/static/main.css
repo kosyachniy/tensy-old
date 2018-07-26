@@ -167,10 +167,6 @@ textarea.u-descr {
 	vertical-align: middle;
 }
 
-.u-logo svg text {
-	fill: var(--font-black);
-}
-
 .u-expand {
 	width: calc(100% - 250px);
 	display: inline-block;

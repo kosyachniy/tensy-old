@@ -5,7 +5,7 @@
 ## API
 Адрес: [``` http://167.99.128.56/ ```](http://167.99.128.56/)
 
-Код ответа для всех методов | Название
+Код ошибки для всех методов | Название
 ---|---
 0 | Успешно
 1 | Ошибка сервера
@@ -62,7 +62,7 @@ ID | ``` id ``` | ID пользователя
 <br>
 
 ### 3. Настройки ``` profile.edit ```
-Атрибут запроса | Название | Детали | Обязательный? | Тип данных | Описание
+Атрибут запроса | Название | Обязательный? | Тип данных | Описание
 ---|---|---|---|---
 Токен | ``` token ``` | + | str | Токен сессии
 Имя | ``` name ``` | - | str | Только буквы<br>Регистр не важен
@@ -80,7 +80,7 @@ ID | ``` id ``` | ID пользователя
 <br>
 
 ### 4. Закрытие сессии ``` profile.exit ```
-Атрибут запроса | Название | Детали | Обязательный? | Тип данных | Описание
+Атрибут запроса | Название | Обязательный? | Тип данных | Описание
 ---|---|---|---|---
 Токен | ``` token ``` | + | str | Токен сессии
 
@@ -94,19 +94,89 @@ ID | ``` id ``` | ID пользователя
 MongoDB
 
 ### ``` users ```
-``` {<br>\t'id': int,<br>\t'login': str,<br>\t'password': str,<br>\t'mail': str,<br>\t'name': str,<br>\t'surname': str,<br>\t'description': str,<br>\t'admin': int,<br>\t'rating': int,<br>\t'tokens': int,<br>\t'ladders': [{<br>\t\t'id': int,<br>\t\t'step': int,<br>\t\t'new': [<br>\t\t\tint,<br>\t\t],<br>\t\t]},<br>\t'transactions': [{<br>\t\t'type': int,<br>\t\t'count': int,<br>\t\t'user': int,<br>\t\t'out': int,<br>\t\t'time': float,<br>\t}],<br>} ```
+```
+{
+	'id': int,
+	'login': str,
+	'password': str,
+	'mail': str,
+	'name': str,
+	'surname': str,
+	'description': str,
+	'admin': int,
+	'rating': int,
+	'tokens': int,
+	'ladders': [{
+		'id': int,
+		'step': int,
+		'new': [
+			int,
+		],
+	}],
+	'transactions': [{
+		'type': int,
+		'count': int,
+		'user': int,
+		'out': int,
+		'time': float,
+	}],
+}
+```
 
 ### ``` ladders ```
-``` {<br>\t'id': int,<br>\t'name': str,<br>\t'description': str,<br>\t'tags': [<br>\t\tstr,<br>\t],<br>\t'steps': [{<br>\t\t'name': str,<br>\t\t'cont': str,<br>\t\t'options': [<br>\t\t\tstr,<br>\t\t],<br>\t\t'answers': [<br>\t\t\tint,<br>\t\t],<br>\t\t'theory': str,<br>\t\t'user': int,<br>\t}],<br>\t'view': [<br>\t\tint,<br>\t],<br>\t'like': [<br>\t\tint,<br>\t],<br>\t'dislike': [<br>\t\tint,<br>\t],<br>\t'comment': [<br>\t\t?<br>\t],<br>\t'priority': int,<br>\t'time': float,<br>\t'user': int,<br>\t'status': int,<br>} ```
+```
+{
+	'id': int,
+	'name': str,
+	'description': str,
+	'tags': [
+		str,
+	],
+	'steps': [{
+		'name': str,
+		'cont': str,
+		'options': [
+			str,
+		],
+		'answers': [
+			int,
+		],
+		'theory': str,
+		'user': int,
+	}],
+	'view': [
+		int,
+	],
+	'like': [
+		int,
+	],
+	'dislike': [
+		int,
+	],
+	'comment': [
+		?
+	],
+	'priority': int,
+	'time': float,
+	'user': int,
+	'status': int,
+}
+```
 
 ### ``` tokens ```
-``` {<br>\t'id': int,<br>\t'token': str,<br>\t'time': float,<br>} ```
+```
+{
+	'id': int,
+	'token': str,
+	'time': float,
+}
+```
 
 ### ``` actions ```
 
 ## Коды
 
-### Администратор ``` admin ```
+### Уровень доступа ``` admin ```
 Код | Значение
 ---|---
 0 | Удалён
@@ -136,8 +206,5 @@ MongoDB
 ### Статус курса ``` status ```
 Код | Значение
 ---|---
-0 | Неизвестный статус
-1 | Черновик
-2 | На редакции
-3 | Опубликовано
-4 | Скрыто
+0 | Скрыто
+1 | Опубликовано
