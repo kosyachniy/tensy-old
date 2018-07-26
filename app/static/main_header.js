@@ -32,12 +32,12 @@ function change(min_width=700) {
 }
 
 // Сетка статей
-
+/*
 function place(elem, count=4, percent=100, margin=0, padding=0, max_width=1500, min_width=590) {
 	var head = document.head || document.getElementsByTagName('head')[0];
 	var style = document.createElement('style');
 
-	var ots = margin * 2; /* + padding * 2*/
+	var ots = margin * 2; / * + padding * 2* /
 	var re = (max_width - min_width) / (count - 1);
 	var obl = max_width * percent / 100;
 
@@ -53,6 +53,7 @@ function place(elem, count=4, percent=100, margin=0, padding=0, max_width=1500, 
 
 	head.appendChild(style);
 }
+*/
 
 // Отображение контента без перезагрузки
 

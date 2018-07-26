@@ -418,7 +418,7 @@ textarea.u-descr {
 /* Статьи */
 
 .u-title, .u-stat {
-	font-size: 30px;
+	/*font-size: 30px;*/
 	font-weight: bold;
 	margin: 0 0 2px 30px;
 	line-height: 1em;
@@ -467,14 +467,35 @@ textarea.u-descr {
 	padding: 0;
 }
 
-/**/
+/*
+<script>
+place('.u-notes', 3, 100, 12, 7, 850, 450);
+</script>
+*/
 
-/*.u-sys, .u-sys tr, .u-sys td {
-	border: 0;
+u-notes {width: 100%;}
+.u-notes a > div {width: 100%;}
+.u-notes > a {margin: 12px;}
+.u-notes a > div {padding: 7px;}
+
+@media all and (max-width: 450px) {
+	.u-notes {width: 100%;}
+	.u-notes > a {width: calc(100% - 24px);}
 }
 
-.u-sys td {
-	padding: 10px;
-	line-height: 1em;
-	height: calc(1em + 20px);
-}*/
+@media all and (min-width: 450px) {
+	.u-notes {width: 100%; margin-left: 0%;}
+	.u-notes > a {width: calc(50% - 24px);}
+}
+
+@media all and (min-width: 650px) {
+	.u-notes {width: 100%; margin-left: 0%;}
+	.u-notes > a {width: calc(33.333333333333336% - 24px);}
+}
+
+@media all and (min-width: 850px) {
+	.u-notes {width: 850px;}
+	.u-notes > a {width: 259.3333333333333px;}
+}
+
+/**/

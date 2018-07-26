@@ -102,7 +102,7 @@ def process():
 
 			x['login'] = x['login'].lower()
 
-			#Логин существует
+			#Логин уже зарегистрирован
 			if len(list(db['users'].find({'login': x['login']}))):
 				return dumps({'error': 5, 'message': 'This login already exists'})
 
@@ -110,7 +110,7 @@ def process():
 			if not 3 <= len(x['login']) <= 10 or len(findall('[^a-z0-9]', x['login'])) or not len(findall('[a-z]', x['login'])):
 				return dumps({'error': 6, 'message': 'Wrong login: length must be more than 3 and less than 10 characters, consist only of digits and at least a few latin letters'})
 
-			#Почта зарегистрирована
+			#Почта уже зарегистрирована
 			if len(list(db['users'].find({'mail': x['mail']}))):
 				return dumps({'error': 7, 'message': 'This mail already exsists'})
 
@@ -118,15 +118,15 @@ def process():
 			if not 6 <= len(x['pass']) <= 40 or len(findall('[^a-zA-z0-9!@#$%^&*()-_+=;:,./?\|`~\[\]{}]', x['pass'])) or not len(findall('[a-zA-Z]', x['pass'])) or not len(findall('[0-9]', x['pass'])):
 				return dumps({'error': 8, 'message': 'Invalid password: the length must be from 6 to 40 characters, consist of mandatory digits, characters:! @, #, $, %, ^, &, *, (, ), -, _, +, =, ;, :, ,, ., /, ?, |, `, ~, [, ], {, } and necessarily Latin letters'})
 
-			#Это не почта
+			#Недопустимая почта
 			if match('.+@.+\..+', x['mail']) == None:
 				return dumps({'error': 9, 'message': 'Invalid mail'})
 
-			#Неправильное имя
+			#Недопустимое имя
 			if 'name' in x and not x['name'].isalpha():
 				return dumps({'error': 10, 'message': 'Invalid name'})
 
-			#Неправильная фамилия
+			#Недопустимая фамилия
 			if 'surname' in x and not x['surname'].isalpha():
 				return dumps({'error': 11, 'message': 'Invalid surname'})
 
@@ -165,20 +165,6 @@ def process():
 
 			return dumps({'error': 0, 'id': id, 'token': token})
 
-# db['users'].insert({
-# 	'id': 1,
-# 	'login': 'kosyachniy',
-# 	'password': '<md5>',
-# 	'name': 'Алексей',
-# 	'surname': 'Полоз',
-# 	'rating': 0,
-# 	'mail': 'polozhev@mail.ru',
-# 	'description': 'Косячь пока косячится',
-# 	'admin': 8,
-# })
-
-# 0 - удалён | 1 - заблокирован | 2 - не авторизован | 3 - обычный | 4 - продвинутый | 5 -  корректор | 6 - модератор | 7 - администратор | 8 - владелец
-
 #Авторизация
 		elif x['method'] == 'profile.auth':
 			mes = errors(x, (
@@ -189,7 +175,7 @@ def process():
 
 			x['login'] = x['login'].lower()
 
-			#Логин не существует
+			#Неправильный логин
 			if not len(list(db['users'].find({'login': x['login']}))):
 				return dumps({'error': 5, 'message': 'Login does not exist'})
 
@@ -213,7 +199,7 @@ def process():
 				('name', False, str),
 				('surname', False, str),
 				('description', False, str),
-				#('photo', False, str)
+				('photo', False, str),
 			))
 			if mes: return mes
 
@@ -223,14 +209,14 @@ def process():
 			i = db['users'].find_one({'id': user})
 
 			if 'name' in x:
-				#Неправильное имя
+				#Недопустимое имя
 				if not x['name'].isalpha():
 					return dumps({'error': 6, 'message': 'Invalid name'})
 
 				i['name'] = x['name'].title()
 
 			if 'surname' in x:
-				#Неправильная фамилия
+				#Недопустимая фамилия
 				if not x['surname'].isalpha():
 					return dumps({'error': 7, 'message': 'Invalid surname'})
 
@@ -263,7 +249,7 @@ def process():
 				db['tokens'].remove(i)
 				return dumps({'error': 0})
 
-			#? Несуществующий токен
+			#Неправильный токен
 			else:
 				return dumps({'error': 5, 'message': 'Invalid token'})
 
@@ -395,24 +381,6 @@ def process():
 			ladders = db['ladders'].find(category).sort('priority', -1)[0:count]
 
 			return dumps({'error': 0, 'ladders': del_id(ladders)})
-
-#db['ladders'].insert({'id':1,'name':'Машинное обучение и анализ данных','author':'МФТИ & Яндекс','description':'Мы покажем, как проходит полный цикл анализа, от сбора данных до выбора оптимального решения и оценки его качества. Вы научитесь пользоваться современными аналитическими инструментами и адаптировать их под особенности конкретных задач.','time':'1530466698','user':'kosyachniy', 'status':3,})
-# db['ladders'].insert({
-# 	'id': 1,
-# 	'name': 'Title',
-# 	'priority': 50,
-# 	'cont': 'Text',
-# 	'tags': ['ladder', 'test'],
-# 	'description': 'descr',
-# 	'author': 1,
-# 	'time': 1528238479.252285,
-# 	'category': 1,
-# 	'status': 3, 1 - черновик 2 - на редакцию 3 - опубликовано 4 - скрыто
-# 	'view': [1, 2],
-# 	'like': [1,],
-# 	'dislike': [2,],
-# 	'comment': [],
-# })
 
 #Получение курса
 		elif x['method'] == 'ladders.get':

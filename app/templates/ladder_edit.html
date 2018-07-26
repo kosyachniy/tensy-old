@@ -5,7 +5,7 @@
 img {width: 100%; margin-top: 10px;}
 </style>
 
-<div class="u-title">Edit ladder &nbsp; <a href="?"><img src="/static/view.svg" alt="View" title="View"></a></div>
+<h2 class="u-title">Edit ladder &nbsp; <a href="?"><img src="/static/view.svg" alt="View" title="View"></a></h2>
 
 <form action="/sys_ladder_edit?i={{ ladder.id }}" method="post" enctype="multipart/form-data">
 	<input type="text" name="name" placeholder="Name" value="{{ ladder.name }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
