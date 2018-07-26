@@ -1,3 +1,36 @@
+// Менять отображение хедера
+
+$(function() {
+	$(window).resize(hideHeader);
+});
+
+var x = document.body.clientWidth;
+
+function hideHeader() {
+	var y = document.body.clientWidth;
+
+	if (x <= 700 && y > 700) {
+		$('.u-expand').css('display', 'inline-block');
+	} else if (y <= 700 && x > 700) {
+		$('.u-expand').css('display', 'none');
+	}
+
+	x = y;
+}
+
+// Хедер при нажатии
+
+function change(min_width=700) {
+	if (document.body.clientWidth <= min_width) {
+		if ($('.u-expand').css('display') == 'block')
+			$('.u-expand').css('display', 'none');
+		else
+			$('.u-expand').css('display', 'inline-block');
+	} else {
+		document.location.href = '/';
+	}
+}
+
 // Автоматическое изменение ширины в зависимости от контента
 
 var d = {};

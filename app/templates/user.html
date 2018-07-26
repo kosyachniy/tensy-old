@@ -44,7 +44,7 @@
 </style>
 
 <div class="u-block-photo">
-	<img src="{{ preview('users', users.id) }}">
+	<img src="{{ preview('users', users.id) }}" alt="{{ users.surname }} {{ users.name }}" title="{{ users.surname }} {{ users.name }}">
 </div><div class="u-block-info">
 	<h2>{{ users.surname }} {{ users.name }}</h2>
 	 &nbsp; @{{ users.login }}

@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block cont %}
+
+{% from 'list_step.html' import list_step %}
+
+<h2 class="u-title">{{ step.name }} &nbsp; <a href="./"><img src="/static/view.svg" alt="View" title="View"></a></h2>
+
+<br>
+
+{{ list_step(step, ladder, id, answers) }}
+
+<br><br>
+
+Author: {{ step.user.surname }} {{ step.user.name }}
+
+<br><br>
+
+{% endblock %}

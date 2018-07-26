@@ -2,7 +2,7 @@
 {% block cont %}
 
 <style>
-img {width: 100%;}
+.u-ava {width: 100%;}
 
 .u-tag {
 	background-color: var(--quote);
@@ -15,9 +15,9 @@ img {width: 100%;}
 
 <h2 class="u-title">{{ ladder.name }} &nbsp; <a href="?edit=1"><img src="/static/edit.svg" alt="Edit" title="Edit"></a></h2>
 
-<img src="{{ preview('ladders', ladder.id) }}" alt="{{ ladder.name }}"><br>
+<img src="{{ preview('ladders', ladder.id) }}" alt="{{ ladder.name }}" title="{{ ladder.name }}" class="u-ava"><br>
 
-{% for i in ladder.tags %}<div class="u-tag">{{ i }}</div>{% endfor %}<br><br>
+{% for i in ladder.tags %}<a href="/search/{{ i }}"><div class="u-tag">{{ i }}</div></a>{% endfor %}<br><br>
 
 <div class="u-block">
 	{{ ladder.description }}

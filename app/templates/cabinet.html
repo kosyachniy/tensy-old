@@ -2,7 +2,7 @@
 {% block cont %}
 
 <style>
-img {
+.u-ava {
 	width: 100%;
 }
 </style>
@@ -13,7 +13,7 @@ img {
 <h2 class="u-stat"><img src="/static/rating.svg" alt="Rating" title="Rating"> &nbsp; {{ user.rating }}</h2>
 
 <h2 class="title2">Update avatar</h2>
-<img src="{{ preview('users', user.id) }}"><br>
+<img src="{{ preview('users', user.id) }}" class="u-ava"><br>
 
 <form action="/sys_profile_edit?url={{ loc }}" method="post" enctype="multipart/form-data">
 	<input type="file" name="photo" class="photo" id="photo">

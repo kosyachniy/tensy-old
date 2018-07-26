@@ -1,16 +1,19 @@
 {% extends "main.html" %}
 {% block cont %}
 
+{% from 'list_step.html' import list_step %}
+
 <style>
-img {width: 100%; margin-top: 10px;}
+.u-ava {width: 100%; margin-top: 10px;}
+.u-step {width: 100%; cursor: pointer;}
 </style>
 
-<h2 class="u-title">Edit ladder &nbsp; <a href="?"><img src="/static/view.svg" alt="View" title="View"></a></h2>
+<h2 class="u-title">Edit ladder &nbsp; <a href="./"><img src="/static/view.svg" alt="View" title="View"></a></h2>
 
 <form action="/sys_ladder_edit?i={{ ladder.id }}" method="post" enctype="multipart/form-data">
 	<input type="text" name="name" placeholder="Name" value="{{ ladder.name }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
 
-	<img src="{{ preview('ladders', ladder.id) }}" alt="{{ ladder.name }}"><br>
+	<img src="{{ preview('ladders', ladder.id) }}" alt="{{ ladder.name }}" title="{{ ladder.name }}" class="u-ava"><br>
 	<input type="file" name="preview" class="preview" id="preview">
 	<label for="preview">Update preview</label>
 	<script>
@@ -41,37 +44,14 @@ $('.preview').on('change', function() {
 	<br><br><hr><hr><br><br>
 
 {% for i, el in enumerate(ladder.steps) %}
-	<h2 class="u-title">Step {{ i }}{% if i == 0 %} (Introduction){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder.id }}&step={{ i }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a></h2>
-
-	<form action="/sys_step_edit?ladder={{ ladder.id }}&step={{ i }}" method="post" enctype="multipart/form-data">
-		<input type="text" name="name" placeholder="Name" value="{{ el.name }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
-		<textarea name="cont" placeholder="Content" class="u-cont">{{ el.cont }}</textarea>
-
-		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required>{{ ';'.join(el.options) }}</textarea>
-		<input type="text" name="answers" placeholder="Answers (example: 1; 2)" value="{{ answers(el.answers) }}" readonly onfocus="this.removeAttribute('readonly')">
-
-		<textarea name="theory" placeholder="Theory" class="u-cont">{{ el.theory }}</textarea>
-
-		<input type="submit" value="Edit">
-	</form>
-
-		<br><br><hr><br>
+	<div class="u-step" onclick="location.href='/ladder/{{ ladder.id }}/question/{{ i }}'">
+		<h2 class="u-title">Step {{ i }}{% if i==0 %} (Introduction){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder.id }}&step={{ i }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a></h2>
+		{{ el.name }}
+	</div>
+	<br><br><hr><br>
 {% endfor %}
 
-	<h2 class="u-title">Add step</h2>
-
-	<form action="/sys_step_add?ladder={{ ladder.id }}" method="post" enctype="multipart/form-data">
-		<input type="text" name="name" placeholder="Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required>
-		<textarea name="cont" placeholder="Content" class="u-cont"></textarea>
-
-		<textarea name="options" placeholder="Options (example: option 1; option 2)" class="u-descr" required></textarea>
-		<input type="text" name="answers" placeholder="Answers (example: 1; 2)" readonly autocomplete="off" onfocus="this.removeAttribute('readonly')">
-
-		<textarea name="theory" placeholder="Theory" class="u-cont" required></textarea>
-
-		<input type="submit" value="Add">
-	</form>
-
-		<br><br>
+	{{ list_step(None, ladder.id, None, None) }}
+	<br><br>
 
 {% endblock %}

@@ -2,7 +2,7 @@
 {% block cont %}
 
 <style>
-img {width: 100%;}
+.u-block img, .u-check img {width: 100%;}
 
 .u-block a {color: blue;}
 
@@ -25,7 +25,7 @@ p {
 }
 </style>
 
-<h2 class="u-title">{{ step.name }} &nbsp; <a href="../../study/{{ id }}"><img src="/static/help.svg" alt="Help" title="Help"></a></h2>
+<h2 class="u-title">{{ step.name }} &nbsp; <a href="../../study/{{ id }}"><img src="/static/help.svg" alt="Help" title="Help"></a> &nbsp; <a href="?edit=1"><img src="/static/edit.svg" alt="Edit" title="Edit"></a></h2>
 
 {% if step.cont %}
 <br>

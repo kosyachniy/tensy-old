@@ -1,38 +1,6 @@
-// Менять отображение хедера
-
-$(function() {
-	$(window).resize(hideHeader);
-});
-
-var x = document.body.clientWidth;
-
-function hideHeader() {
-	var y = document.body.clientWidth;
-
-	if (x <= 700 && y > 700) {
-		$('.u-expand').css('display', 'inline-block');
-	} else if (y <= 700 && x > 700) {
-		$('.u-expand').css('display', 'none');
-	}
-
-	x = y;
-}
-
-// Хедер при нажатии
-
-function change(min_width=700) {
-	if (document.body.clientWidth <= min_width) {
-		if ($('.u-expand').css('display') == 'block')
-			$('.u-expand').css('display', 'none');
-		else
-			$('.u-expand').css('display', 'inline-block');
-	} else {
-		document.location.href = '/';
-	}
-}
-
 // Сетка статей
-/*
+// <script>place('.u-notes', 3, 100, 12, 7, 850, 450);</script>
+
 function place(elem, count=4, percent=100, margin=0, padding=0, max_width=1500, min_width=590) {
 	var head = document.head || document.getElementsByTagName('head')[0];
 	var style = document.createElement('style');
@@ -53,9 +21,9 @@ function place(elem, count=4, percent=100, margin=0, padding=0, max_width=1500, 
 
 	head.appendChild(style);
 }
-*/
 
 // Отображение контента без перезагрузки
+// onclick="ahref('/competions');"
 
 function showContent(link) {  
 	var cont = document.getElementById('contentBody');
