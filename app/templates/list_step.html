@@ -1,5 +1,5 @@
 {% macro list_step(el, ladder, step, answers) %}
-	<h2 class="u-title">{% if el %}Step {{ step }}{% if step == 0 %} (Introduction){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder }}&step={{ step }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a>{% else %}Add step{% endif %}</h2>
+	<h2 class="u-title">{% if el %}Step {{ step }}{% if step == 0 %} (Ground){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder }}&step={{ step }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a>{% else %}Add step{% endif %}</h2>
 
 	<form action="/sys_step_{% if el %}edit{% else %}add{% endif %}?ladder={{ ladder }}{% if el %}&step={{ step }}{% endif %}" method="post" enctype="multipart/form-data">
 		<input type="text" name="name" placeholder="Name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')" required{% if el %} value="{{ el.name }}"{% endif %}>

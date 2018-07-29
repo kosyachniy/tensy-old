@@ -425,7 +425,7 @@ def process():
 
 			db['ladders'].save(ladder)
 
-			return dumps({'error': 0, 'id': len(ladder['steps'])})
+			return dumps({'error': 0, 'id': len(ladder['steps'])-1})
 
 #Изменение шага
 		elif x['method'] == 'step.edit':
@@ -494,7 +494,7 @@ def process():
 
 			if i:
 				if len(i['steps']) > x['step']:
-					del i['steps'][x['step']]['answers']
+					#del i['steps'][x['step']]['answers'] #для изменения
 
 					req = db['users'].find_one({'id': i['steps'][x['step']]['user']})
 					i['steps'][x['step']]['user'] = {

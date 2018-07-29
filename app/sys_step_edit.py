@@ -7,25 +7,26 @@ import json
 @app.route('/sys_step_edit', methods=['POST'])
 def sys_step_edit():
 	x = request.form
-	id = request.args.get('ladder')
+	ladder = request.args.get('ladder')
+	step = request.args.get('step')
 
 	req = {
 		'method': 'step.edit',
 		'token': session['token'],
 		'name': x['name'],
-		'ladder': int(id),
-		'step': int(request.args.get('step')),
+		'ladder': int(ladder),
+		'step': int(step),
 		'cont': x['cont'],
 		'theory': x['theory'],
-		'options': x['options'].split(';'),
+		'options': [i for i in x['options'].split(';') if i],
 	}
 
 	if 'answers' in x and len(x['answers']):
-		req['answers'] = [int(i) for i in x['answers'].split(';')]
+		req['answers'] = [int(i) for i in x['answers'].split(';') if i]
 
 	req = json.loads(post(LINK, json=req).text)
 
 	if not req['error']:
-		return redirect(LINK + 'ladder/' + id + '/?edit=1')
+		return redirect(LINK + 'ladder/' + ladder + '/question/' + step)
 	else:
 		return render_template('message.html', cont=req['message'])

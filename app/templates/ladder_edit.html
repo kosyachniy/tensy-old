@@ -6,6 +6,7 @@
 <style>
 .u-ava {width: 100%; margin-top: 10px;}
 .u-step {width: 100%; cursor: pointer;}
+.u-href {display: block; content: ""; height: 100px; margin: -100px 0 0;}
 </style>
 
 <h2 class="u-title">Edit ladder &nbsp; <a href="./"><img src="/static/view.svg" alt="View" title="View"></a></h2>
@@ -44,8 +45,9 @@ $('.preview').on('change', function() {
 	<br><br><hr><hr><br><br>
 
 {% for i, el in enumerate(ladder.steps) %}
+	<a name="{{ i }}" class="u-href"></a>
 	<div class="u-step" onclick="location.href='/ladder/{{ ladder.id }}/question/{{ i }}'">
-		<h2 class="u-title">Step {{ i }}{% if i==0 %} (Introduction){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder.id }}&step={{ i }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a></h2>
+		<h2 class="u-title">Step {{ i }}{% if i==0 %} (Ground){% endif %} &nbsp; <a href="/sys_step_delete?ladder={{ ladder.id }}&step={{ i }}"><img src="/static/delete.svg" alt="Delete" title="Delete"></a></h2>
 		{{ el.name }}
 	</div>
 	<br><br><hr><br>

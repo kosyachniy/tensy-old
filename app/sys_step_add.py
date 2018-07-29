@@ -7,13 +7,14 @@ import json
 @app.route('/sys_step_add', methods=['POST'])
 def sys_step_add():
 	x = request.form
-	id = request.args.get('ladder')
+	ladder = request.args.get('ladder')
+	print(x)
 
 	req = {
 		'method': 'step.add',
 		'token': session['token'],
 		'name': x['name'],
-		'ladder': int(id),
+		'ladder': int(ladder),
 		'cont': x['cont'],
 		'theory': x['theory'],
 		'options': x['options'].split(';'),
@@ -25,6 +26,6 @@ def sys_step_add():
 	req = json.loads(post(LINK, json=req).text)
 
 	if not req['error']:
-		return redirect(LINK + 'ladder/' + id + '/?edit=1')
+		return redirect(LINK + 'ladder/' + ladder + '/?edit=1#' + str(req['id']))
 	else:
 		return render_template('message.html', cont=req['message'])
